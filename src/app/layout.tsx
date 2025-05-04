@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
+import { homePath, ticketsPath } from "@/paths";
 
 
 const geistSans = Geist({
@@ -25,10 +27,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <head>
+        <title>My App</title>
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
+        <nav>
+          <div className="flex flex-col gap-4">
+            <Link href={homePath()} className="text-3xl font-bold">
+              <span className="text-blue-500">Home</span>
+            </Link>
+            <Link href={ticketsPath()} className="text-3xl font-bold">
+              <span className="text-blue-500">Tickets</span>
+            </Link>
+            <Link href="/about" className="text-3xl font-bold">
+              <span className="text-blue-500">About</span>
+            </Link>
+          </div>
+        </nav>
+        <main className="py-24 px-52 @container">
+          {children}
+          </main>
       </body>
     </html>
   );
