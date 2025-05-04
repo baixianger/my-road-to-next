@@ -1,22 +1,21 @@
-
-
-export const tickets = [
-    {
-        id: "1",
-        title: "Ticket 1",
-        description: "Description for ticket 1",
-        status: "open",
-    },
-    {
-        id: "2",
-        title: "Ticket 2",
-        description: "Description for ticket 2",
-        status: "closed",
-    },
-    {
-        id: "3",
-        title: "Ticket 3",
-        description: "Description for ticket 3",
-        status: "open",
-    },
-]
+// Define the Ticket type
+type Ticket = {
+    id: string;
+    title: string;
+    description: string;
+    status: 'open' | 'closed';
+    priority: 'low' | 'medium' | 'high';
+  };
+  
+  // Initialize the array with the correct type
+  export const tickets: Ticket[] = [];
+  
+  for (let i = 1; i <= 100; i++) {
+    tickets.push({
+      id: `${i}`,
+      title: `Ticket ${i}`,
+      description: `This is the description for ticket ${i}`,
+      status: i % 2 === 0 ? 'open' : 'closed',
+      priority: ['low', 'medium', 'high'][i % 3] as 'low' | 'medium' | 'high',
+    });
+  }

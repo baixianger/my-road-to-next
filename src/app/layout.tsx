@@ -31,8 +31,15 @@ export default function RootLayout({
         <title>My App</title>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
-        <nav>
-          <div className="flex flex-col gap-4">
+        <nav 
+          className="
+            supports-backdrop-blur:bg-background/60 
+            fixed top-0 left-0 right-0 z-20 
+            border-b bg-background/95 backdrop-blur 
+            w-full flex py-2.5 px-5 justify-between
+            "
+        > {/*此处safari和chrome表现不太一样，safari在内容没填充满页面时表现的行为时可以滚动而非fixed，只有溢出后才有固定的行为 */}
+          <div className="flex gap-4">
             <Link href={homePath()} className="text-3xl font-bold">
               <span className="text-blue-500">Home</span>
             </Link>
@@ -44,7 +51,15 @@ export default function RootLayout({
             </Link>
           </div>
         </nav>
-        <main className="py-24 px-52 @container">
+        <main 
+          className="
+            min-h-screen flex-1
+            overflow-y-auto overflow-x-hidden
+            py-24 px-8
+            bg-secondary/20
+            flex flex-col
+          "
+        >
           {children}
           </main>
       </body>
