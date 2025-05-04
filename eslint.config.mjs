@@ -17,15 +17,15 @@ const eslintConfig = [
   // 添加 simple-import-sort 插件
   {
     plugins: {
-      "simple-import-sort": [
-        simpleImportSort,
+      "simple-import-sort": simpleImportSort,
+    },
+    rules: {
+      "simple-import-sort/imports": [
+        "error",
         {
           "groups": [["^\\u0000", "^@?\\w", "^[^.]", "^\\."]]
         }
-      ]
-    },
-    rules: {
-      "simple-import-sort/imports": "error",
+      ],
       "simple-import-sort/exports": "error",
     },
   },
