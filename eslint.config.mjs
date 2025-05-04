@@ -1,6 +1,11 @@
 import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
+import pluginReact from "eslint-plugin-react";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
+import globals from "globals";
 import { dirname } from "path";
+import tseslint from "typescript-eslint";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -10,11 +15,14 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
-  // 加载 Next.js 的旧版配置（通过 FlatCompat 转换）
+
+export default defineConfig([
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-  
-  // 添加 simple-import-sort 插件
+  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"] },
+  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], languageOptions: { globals: globals.browser } },
+  tseslint.configs.recommended,
+  // pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat['jsx-runtime'],
   {
     plugins: {
       "simple-import-sort": simpleImportSort,
@@ -29,6 +37,4 @@ const eslintConfig = [
       "simple-import-sort/exports": "error",
     },
   },
-];
- 
-export default eslintConfig;
+]);
