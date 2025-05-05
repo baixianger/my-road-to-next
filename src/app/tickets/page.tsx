@@ -1,5 +1,6 @@
 // import clsx from "clsx";
 import Link from "next/link";
+import { Heading } from "@/components/heading";
 import {
   Card,
   CardContent,
@@ -7,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator";
 import { tickets } from "@/data";
 import { TICKET_ICONS } from "@/icons";
 import { ticketPath } from "@/paths";
@@ -16,15 +16,7 @@ import { ticketPath } from "@/paths";
 const TicketsPage = () => {
   return (
   <div className="flex-1 flex flex-col gap-y-8">
-    <div>
-      <h2 className="text-3xl font-bold tracking-tight">TicketsPage</h2>
-      <p className="text-sm text-muted-foreground">
-        All your tickets at one place
-      </p>
-    </div>
-    <Separator/>
-    {/* 这里的分割线是用来分割标题和内容的 */}
-    {/* 动画 */}
+    <Heading title="Tickets" description="All your tickets at one place"/>
     <div className="flex-1 flex flex-col items-center gap-y-4 animate-fade-in-from-top">
       {tickets.map((ticket) => (
         <Card key={ticket.id} className="w-full max-w-[420px]">
