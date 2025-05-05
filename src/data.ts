@@ -1,13 +1,4 @@
-
-// Define the Ticket type
-type Ticket = {
-    id: string;
-    title: string;
-    description: string;
-    status: 'OPEN' | 'DONE' | 'RUNNING' | 'CLOSED';
-    priority: 'LOW' | 'MEDIUM' | 'HIGH';
-  };
-
+import { Ticket } from '@/features/ticket/types';
 
 // Initialize the array with the correct type
 export const tickets: Ticket[] = [];

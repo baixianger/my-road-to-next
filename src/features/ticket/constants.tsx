@@ -7,4 +7,4 @@ export const TICKET_ICONS = {
   DONE: <CircleCheck />,
   RUNNING: <Pencil />,
   CLOSED: <CircleX />,
-}
+};
