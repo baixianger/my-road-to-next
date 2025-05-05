@@ -1,8 +1,17 @@
-import clsx from "clsx";
+// import clsx from "clsx";
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator";
 import { tickets } from "@/data";
 import { TICKET_ICONS } from "@/icons";
 import { ticketPath } from "@/paths";
+
 
 const TicketsPage = () => {
   return (
@@ -13,23 +22,30 @@ const TicketsPage = () => {
         All your tickets at one place
       </p>
     </div>
+    <Separator/>
+    {/* 这里的分割线是用来分割标题和内容的 */}
     {/* 动画 */}
     <div className="flex-1 flex flex-col items-center gap-y-4 animate-fade-in-from-top">
       {tickets.map((ticket) => (
-        <div 
-          key={ticket.id}
-          className="w-full max-w-[420px] p-4 border border-slate-200 rounded"
-        >
-          <div>{TICKET_ICONS[ticket.status]}</div>
-          <h3 className="text-lg font-semibold truncate">{ticket.title}</h3> 
-          <p className={clsx("text-sm text-slate-500 truncate",{
-            "line-through decoration-amber-600": ticket.status === "CLOSED",
-          })}>
-            {ticket.description + ticket.description}
-          </p>
-
-          <Link className="text-sm underline" href={ticketPath(ticket.id)}>view</Link>
-        </div>
+        <Card key={ticket.id} className="w-full max-w-[420px]">
+          <CardHeader>
+            <CardTitle className="flex gap-x-2 items-center">
+              <span>{TICKET_ICONS[ticket.status]}</span>
+              <span className="truncate">{ticket.title}</span> 
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <span className="line-clamp-3 whitespace-break-spaces">
+              {/* clsx("text-sm text-slate-500 truncate",{
+              "line-through decoration-amber-600": ticket.status === "CLOSED",
+            }) */}
+              {ticket.description + ticket.description}
+            </span>
+          </CardContent>
+          <CardFooter>
+            <Link className="text-sm underline" href={ticketPath(ticket.id)}>view</Link>
+          </CardFooter>
+        </Card>
       ))}
     </div>
   
