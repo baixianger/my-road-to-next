@@ -41,13 +41,13 @@ export default function RootLayout({
         > {/*此处safari和chrome表现不太一样，safari在内容没填充满页面时表现的行为时可以滚动而非fixed，只有溢出后才有固定的行为 */}
           <div className="flex gap-4">
             <Link href={homePath()} className="text-3xl font-bold">
-              <span className="text-blue-500">Home</span>
+              <span>Home</span>
             </Link>
             <Link href={ticketsPath()} className="text-3xl font-bold">
-              <span className="text-blue-500">Tickets</span>
+              <span>Tickets</span>
             </Link>
             <Link href="/about" className="text-3xl font-bold">
-              <span className="text-blue-500">About</span>
+              <span>About</span>
             </Link>
           </div>
         </nav>

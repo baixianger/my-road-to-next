@@ -1,10 +1,12 @@
 import {tickets} from '@/data';
+import { TICKET_ICONS } from '@/icons';
 
 type TicketPageProps = {
     params: {
         ticketId: string;
         };
 }
+
 
 // 动态路由传递的永远是一个对象，比如ticketId，实际传输的是{params: {ticketId: '123'}}
 const TicketPage = ({ params }: TicketPageProps) => {
@@ -23,7 +25,7 @@ const TicketPage = ({ params }: TicketPageProps) => {
             <div className="flex flex-col gap-2">
                 <p>Title: {ticket.title}</p>
                 <p>Description: {ticket.description}</p>
-                <p>Status: {ticket.status}</p>
+                <p title={ticket.status}>Status: {TICKET_ICONS[ticket.status]}</p>
             </div>
         </div>
     </div>;
