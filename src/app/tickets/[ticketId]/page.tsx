@@ -13,7 +13,7 @@ type TicketPageProps = {
 
 
 // 动态路由传递的永远是一个对象，比如ticketId，实际传输的是{params: {ticketId: '123'}}
-const TicketPage = async ({ params }: TicketPageProps) => {
+const TicketPage = ({ params }: TicketPageProps) => {
 	const ticketId = params.ticketId;
 	const ticket = tickets.find(ticket => ticket.id === ticketId);
 	if (!ticket) { // 其他方式还有用？表达式来识别未定义的元素，比如 ticket?.id

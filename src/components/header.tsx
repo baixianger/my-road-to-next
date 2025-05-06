@@ -3,6 +3,7 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button"
 import { Button } from "@/components/ui/button"
 import { homePath, ticketsPath } from "@/paths";
+import { ThemeSwitcher } from "./theme/theme-switcher";
 
 const Header = () => {
 	return (
@@ -14,7 +15,7 @@ const Header = () => {
 				w-full flex py-2.5 px-5 justify-between
 				"
 		> {/*此处safari和chrome表现不太一样，safari在内容没填充满页面时表现的行为时可以滚动而非fixed，只有溢出后才有固定的行为 */}
-			<div>
+			<div className="flex align-items gap-x-2">
 				<Button asChild variant="ghost">
 					<Link href={homePath()}>
 						<LucideKanban />
@@ -22,7 +23,8 @@ const Header = () => {
 					</Link>
 				</Button>
 			</div>
-			<div>
+			<div className="flex align-items gap-x-2">
+				<ThemeSwitcher />
 				{/* <Button asChild variant="outline"> */}
 					<Link href={ticketsPath()} className={buttonVariants({ variant: "default" })}>Tickets</Link>
 				{/* </Button> */}
