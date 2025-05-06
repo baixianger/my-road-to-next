@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { Placeholder } from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
-import {tickets} from '@/data';
-import { TICKET_ICONS } from '@/icons';
+import { tickets } from '@/data';
+import { TicketItem } from '@/features/ticket/components/ticket-item';
 import { ticketsPath } from '@/paths';
 
 type TicketPageProps = {
@@ -30,17 +30,11 @@ const TicketPage = async ({ params }: TicketPageProps) => {
 			/>
 		)
 	}
-	return <div>
-		<h2 className="text-3xl">Ticket Page {ticketId}</h2>
-		<div className="flex flex-col gap-4">
-			<h3 className="text-2xl">Ticket Details</h3>
-			<div className="flex flex-col gap-2">
-					<p>Title: {ticket.title}</p>
-					<p>Description: {ticket.description}</p>
-					<p title={ticket.status}>Status: {TICKET_ICONS[ticket.status]}</p>
-			</div>
+	return (
+		<div className="flex justify-center anmiate-fade-in-from-top">
+			<TicketItem ticket={ticket} isDetail />
 		</div>
-	</div>;
+	);
   };
 
   
