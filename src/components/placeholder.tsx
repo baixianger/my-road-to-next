@@ -13,7 +13,7 @@ const Placeholder = ({
   button=<div></div>,
 }: PlaceholderProps) => {
   return (
-    <div className="flex-1 self-center flex flex-col items-center justify-center gap-y-2">
+    <div className="flex-1 self-center flex flex-col items-center justify-center gap-y-2 animate-fade-in-from-top">
       {cloneElement(icon, {
         className: "w-16 h-16",
       })}
