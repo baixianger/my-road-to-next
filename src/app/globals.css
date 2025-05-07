@@ -43,7 +43,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* Define the keyframes animation */
+/* Define the fade-in-from-top animation */
 @keyframes fade-in-from-top {
   from {
     opacity: 0;
@@ -54,11 +54,32 @@
     transform: translateY(0);
   }
 }
-
-/* Make the animation available in Tailwind */
 @layer utilities {
   .animate-fade-in-from-top {
     animation: fade-in-from-top 0.5s ease-out;
+  }
+}
+
+/* Define the bouncing-loader animation */
+@keyframes bouncing-loader {
+  from {
+    opacity: 0.3;
+    transform: translateY(0px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(16px);
+  }
+}
+@layer utilities {
+  .animate-bouncing-loader-000 {
+    animation: bouncing-loader 0.6s infinite alternate;
+  }
+  .animate-bouncing-loader-200 {
+    animation: bouncing-loader 0.6s infinite alternate 0.2s;
+  }
+  .animate-bouncing-loader-400 {
+    animation: bouncing-loader 0.6s infinite alternate 0.4s;
   }
 }
 
