@@ -1,0 +1,35 @@
+// 如果想使用非.env的文件来存储环境变量，可以使用dotenv-cli来指定文件
+// 1. 安装 npm install -g dotenv-cli
+// 2. 填入想要的env文件 dotenv -e .env.local -- npx prisma db push
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Ticket {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   @db.Text
+  status    TicketStatus   @default(OPEN)
+  priority  TicketPriority @default(LOW)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum TicketStatus {
+  OPEN
+  RUNNING
+  DONE
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
