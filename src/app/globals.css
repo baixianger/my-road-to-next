@@ -68,7 +68,7 @@
   }
   to {
     opacity: 1;
-    transform: translateY(16px);
+    transform: translateY(-6px);
   }
 }
 @layer utilities {

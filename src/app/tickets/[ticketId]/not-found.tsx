@@ -7,7 +7,7 @@ import { ticketsPath } from "@/paths";
 export default function NotFound() {
   return (
     <Placeholder
-      label="Ticket not found"
+      label="Ticket not found - 404"
       icon={<LucideTicketX/>}
       button={
         <Button asChild variant="outline">
