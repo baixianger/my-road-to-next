@@ -12,20 +12,19 @@
    * 都测试过，加不加npx的区别在于是否全局安装了tsx和dotenv-cli
 */
 import {PrismaClient} from '@prisma/client';
-import { Ticket } from '@/features/ticket/types';
+import { TicketPriority, TicketStatus } from '@prisma/client';
 
 // Initialize the array with the correct type
-export const tickets: Ticket[] = [];
-
-for (let i = 1; i <= 4; i++) {
-    tickets.push({
-        id: `${i}`,
-        title: `Ticket ${i}`,
-        content: `This is the description for ticket ${i}`,
-        status: i % 4 === 0 ? 'CLOSED' as const : i % 3 === 0 ? 'RUNNING' as const : i % 2 === 0 ? 'DONE' as const : 'OPEN' as const,
-        priority: ['LOW', 'MEDIUM', 'HIGH'][i % 3] as 'LOW' | 'MEDIUM' | 'HIGH'
-    });
-}
+export const tickets = Array.from({ length: 4 }, (_, i) => {
+  const id = `${i + 1}`;
+  return {
+      id,
+      title: `Ticket ${id}`,
+      content: `This is the description for ticket ${id}`,
+      status: ['OPEN', 'DONE', 'RUNNING', 'CLOSED'][i % 4] as TicketStatus,
+      priority: ['LOW', 'MEDIUM', 'HIGH'][i % 3] as TicketPriority
+  };
+});
 
 
 const prisma = new PrismaClient();
