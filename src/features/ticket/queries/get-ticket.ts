@@ -1,15 +1,12 @@
-import { tickets } from "@/data";
+import { prisma } from "@/lib/prisma";
 import { Ticket } from "../types";
 
 export const getTicket = async (ticketId: string): Promise<Ticket | null> => {
-  // Simulate a network request with a delay
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  // If an error occurs, you can throw an error here
-  // throw new Error("Failed to fetch ticket - Error");
-
-  const maybeTicket = tickets.find((ticket) => ticket.id === ticketId);
-  return new Promise((resolve) => {
-    resolve(maybeTicket || null);
+  // two ways to get the ticket findUnique and findUniqueOrThrow
+  // findUniqueOrThrow will throw an error if the ticket is not found
+  return await prisma.ticket.findUnique({
+    where: {
+      id: ticketId,
+    },
   });
 };

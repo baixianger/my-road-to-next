@@ -8,7 +8,7 @@ type TicketPriority = 'LOW' | 'MEDIUM' | 'HIGH';
 export type Ticket = {
     id: string;
     title: string;
-    description: string;
+    content: string;
     status: TicketStatus;
     priority: TicketPriority;
   };

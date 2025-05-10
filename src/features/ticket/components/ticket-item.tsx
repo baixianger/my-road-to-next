@@ -44,8 +44,7 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
           <span className={clsx("whitespace-break-spaces",{
             "line-clamp-3" : !isDetail
           })}>
-            {ticket.description + ticket.description + ticket.description + ticket.description + ticket.description
-            + ticket.description + ticket.description + ticket.description + ticket.description + ticket.description}
+            {ticket.content}
           </span>
         </CardContent>
       </Card>
