@@ -49,7 +49,8 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 
   const detailButton = (
     <Button variant="outline" size="icon" asChild>
-      <Link href={ticketPath(ticket.id)}>
+      {/* 添加预先加载功能，只有在浏览器视图中的next Link组建才能被加载。还没浏览到的不加载 */}
+      <Link prefetch href={ticketPath(ticket.id)}>
         <LucideSquareArrowOutUpRight className="h-4 w-4" />
       </Link>
     </Button>  

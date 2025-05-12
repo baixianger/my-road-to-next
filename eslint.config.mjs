@@ -2,7 +2,7 @@ import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import pluginReact from "eslint-plugin-react";
-import simpleImportSort from "eslint-plugin-simple-import-sort";
+// import simpleImportSort from "eslint-plugin-simple-import-sort";
 import globals from "globals";
 import { dirname } from "path";
 import tseslint from "typescript-eslint";
@@ -22,18 +22,18 @@ export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], languageOptions: { globals: globals.browser } },
   tseslint.configs.recommended,
   pluginReact.configs.flat['jsx-runtime'],
-  {
-    plugins: {
-      "simple-import-sort": simpleImportSort,
-    },
-    rules: {
-      "simple-import-sort/imports": [
-        "error",
-        {
-          "groups": [["^\\u0000", "^@?\\w", "^[^.]", "^\\."]]
-        }
-      ],
-      "simple-import-sort/exports": "error",
-    },
-  },
+  // {
+  //   plugins: {
+  //     "simple-import-sort": simpleImportSort,
+  //   },
+  //   rules: {
+  //     "simple-import-sort/imports": [
+  //       "error",
+  //       {
+  //         "groups": [["^\\u0000", "^@?\\w", "^[^.]", "^\\."]]
+  //       }
+  //     ],
+  //     "simple-import-sort/exports": "error",
+  //   },
+  // },
 ]);

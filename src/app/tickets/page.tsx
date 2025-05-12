@@ -7,6 +7,12 @@ import { Spinner } from "@/components/spinner";
 import { TicketList } from "@/features/ticket/components/ticket-list";
 
 
+// 在生产力环境部署，build后此页面会被编译成一个静态页面（○），
+// 如果是对于博客这种新闻类的页面，影响不大；但是对于数据变化频繁的页面，比如票务系统，
+// 可能会影响到数据的实时性，所以可以使用动态路由，
+// 解决方案是 https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
+export const dynamic = 'force-dynamic'; // 这个页面会被编译成一个动态页面，在build后会显示（ƒ）字样
+
 const TicketsPage = () => {
   return (
   <div className="flex-1 flex flex-col gap-y-8">
