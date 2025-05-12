@@ -17,7 +17,10 @@ import { TicketList } from "@/features/ticket/components/ticket-list";
 // https://nextjs.org/docs/app/building-your-application/data-fetching/incremental-static-regeneration
 // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
 // 时间调成0秒后，实际等效一个动态页面。
-export const revalidate = 60
+// export const revalidate = 60
+
+// 另外一个方案是找到源头，是因为具体的门票页面的删除操作触发的更新需求，所以到具体功能实现的地方去revalidatePath去
+// 具体操作详见delete-ticket.ts内的注释
 
 const TicketsPage = () => {
   return (
