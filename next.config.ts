@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   // cache设置 小心谨慎，优先使用Link里的prefetch
   experimental: {
     staleTimes: {
-      dynamic: 30, //用于生产力环境部署30，默认为0
+      dynamic: 0, //用于生产力环境部署30，默认为0
     },
   },
 };
