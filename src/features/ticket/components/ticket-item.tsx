@@ -1,4 +1,14 @@
-"use client";
+"use client"; //为什么要用客户端组件？因为要用到按钮的onClick事件，所以必须在客户端中执行。
+
+// 如果想保持默认服务端组件的状态
+// 可以用form标签包裹按钮,通过action属性来指定删除的操作，并绑定参数
+// const deleteButton = (
+//   <form action={deleteTicket.bind(null, ticket.id)}>
+//   <Button variant="outline" size="icon" onClick={handleDeleteTicket}>
+//     <LucideTrash className="h-4 w-4" />
+//   </Button>
+//   </form>
+// );
 
 import clsx from "clsx";
 import { LucideSquareArrowOutUpRight, LucideTrash } from "lucide-react";
@@ -52,7 +62,7 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     //     id: ticket.id,
     //   },
     // });
-    await deleteTicket(ticket.id);
+    await deleteTicket(ticket.id); //相当于建立了一个网管，从浏览器端的onClick监听器调用服务器操作。
   }
 
   const deleteButton = (
