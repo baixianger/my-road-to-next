@@ -1,3 +1,5 @@
+"use client";
+
 import clsx from "clsx";
 import { LucideSquareArrowOutUpRight, LucideTrash } from "lucide-react";
 import Link from "next/link";
@@ -8,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { deleteTicket } from "@/features/ticket/actions/delete-ticket";
 import { TICKET_ICONS } from "@/features/ticket/constants";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
 import { getTickets } from "@/features/ticket/queries/get-tickets";
@@ -42,8 +45,18 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     </Button>  
   );
 
+  const handleDeleteTicket = async () => { 
+    // "use server"; //It is not allowed to define inline "use server" annotated Server Actions in Client Components.
+    // await prisma.ticket.delete({
+    //   where: {
+    //     id: ticket.id,
+    //   },
+    // });
+    await deleteTicket(ticket.id);
+  }
+
   const deleteButton = (
-    <Button variant="outline" size="icon">
+    <Button variant="outline" size="icon" onClick={handleDeleteTicket}>
       <LucideTrash className="h-4 w-4" />
     </Button>
   );
@@ -74,3 +87,5 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     </div>
   );
 }
+
+
