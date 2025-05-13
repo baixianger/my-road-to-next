@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { TicketItem } from '@/features/ticket/components/ticket-item';
 import { getTicket } from '@/features/ticket/queries/get-ticket';
+// import { getTickets } from '@/features/ticket/queries/get-tickets';
 
 type TicketPageProps = {
 	params: Promise<{
@@ -26,5 +27,13 @@ const TicketPage = async ({ params }: TicketPageProps) => {
 	);
   };
 
+// 将动态路径静态化，此时为了避免页面不更新，适用于博客内容。同步还得设置revalidatePath在 delete-ticket.ts内
+// https://nextjs.org/docs/app/api-reference/functions/generate-static-params
+// export async function generateStaticParams() {
+// 	const tickets = await getTickets();
+// 	return tickets.map((ticket) => ({
+// 		ticketId: ticket.id,
+// 	}));
+// };
   
-  export default TicketPage
+export default TicketPage
