@@ -5,19 +5,20 @@ import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { fromErrorToActionState, ActionState } from "./to-action-state";
 
 
 const upsertTicketSchema = z.object({
   title: z.string()
     .min(1, { message: "Title is required" })
-    .max(100, { message: "Title must be less than 100 characters" }),
+    .max(20, { message: "Title must be less than 20 characters" }),
   content: z.string()
     .min(1, { message: "Content is required" })
     .max(1000, { message: "Content must be less than 1000 characters" }),
 });
 
 export const upsertTicket = async (
-  _actionState: { message: string; payload?: FormData },
+  _actionState: ActionState,
   formData: FormData
 ) => {
   // 这里的formData是一个FormData对象，包含了表单提交的数据
@@ -37,11 +38,7 @@ export const upsertTicket = async (
       create: data,
     });
   } catch (error) {
-    return {
-      message: "Error creating ticket",
-      payload: formData,
-      error: error,
-    }
+    return fromErrorToActionState(error, formData);
   };
 
   revalidatePath(ticketsPath());
