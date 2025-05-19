@@ -17,13 +17,13 @@ const upsertTicketSchema = z.object({
 });
 
 export const upsertTicket = async (
-  _actionState: {message: string},
+  _actionState: { message: string; payload?: FormData },
   formData: FormData
 ) => {
   // 这里的formData是一个FormData对象，包含了表单提交的数据
   // 你可以使用formData.get('title')来获取表单字段的值
   const id = formData.get('id') as string;
-  try{    
+  try {
     const data = upsertTicketSchema.parse({
       title: formData.get('title'),
       content: formData.get('content'),
@@ -39,6 +39,7 @@ export const upsertTicket = async (
   } catch (error) {
     return {
       message: "Error creating ticket",
+      payload: formData,
       error: error,
     }
   };
