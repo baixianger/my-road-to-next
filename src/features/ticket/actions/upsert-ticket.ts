@@ -47,5 +47,6 @@ export const upsertTicket = async (
   }
   return {
     message: "Ticket created successfully",
+    fieldErrors: {},
   };
 };

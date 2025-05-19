@@ -7,6 +7,7 @@ import { getTicket } from "../queries/get-ticket";
 import { upsertTicket } from "../actions/upsert-ticket";
 import { SubmitButton } from "@/components/submit-button";
 import { useActionState } from "react";
+import { FieldError } from "./field-error";
 
 type TicketUpsertFormProps = {
   ticket?: Awaited<ReturnType<typeof getTicket>>;
@@ -18,7 +19,8 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
   // binding the state to the form action, the state will be updated when the form is submitted.
   // So the state can wrap a lot of information about the result of the action.
   const [actionState, action] = useActionState(upsertTicket, {
-    message: "",
+    message: "", 
+    fieldErrors: {},
   });
   return (
     <form action={action} className="flex flex-col gap-y-2">
@@ -33,6 +35,10 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
           (actionState.payload?.get("title") as string) ?? ticket?.title
         }
       />
+      <FieldError
+        actionState={actionState}
+        name="title"
+      />
 
       <Label htmlFor="content">Content</Label>
       <Textarea
@@ -41,6 +47,10 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
         defaultValue={
           (actionState.payload?.get("content") as string) ?? ticket?.content
         }
+      />
+      <FieldError
+        actionState={actionState}
+        name="content"
       />
 
       <SubmitButton label={ticket ? "Update" : "Create"} />
