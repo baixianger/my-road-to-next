@@ -90,7 +90,7 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         <CardHeader>
           <CardTitle className="flex gap-x-2 items-center">
             <span>{TICKET_ICONS[ticket.status]}</span>
-            <span className="truncate">{ticket.title}</span> 
+            <span className="truncate max-w-70">{ticket.title}</span> 
           </CardTitle>
         </CardHeader>
         <CardContent>
