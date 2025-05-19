@@ -5,8 +5,8 @@ import { Heading } from "@/components/heading";
 import { Placeholder } from "@/components/placeholder";
 import { Spinner } from "@/components/spinner";
 import { TicketList } from "@/features/ticket/components/ticket-list";
-import { TicketCreateForm } from "@/features/ticket/components/ticket-create-form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
+import { CardCompact } from "@/components/card-compact";
 
 
 // 在生产力环境部署，build后此页面会被编译成一个静态页面（○），
@@ -30,15 +30,12 @@ const TicketsPage = () => {
     <Heading title="Tickets" description="All your tickets at one place"/>
 
     {/* 添加创建ticket的输入卡片 */}
-    <Card className="w-full max-w-[420px] self-center">
-      <CardHeader>
-        <CardTitle>Create Ticket</CardTitle>
-        <CardDescription>A new ticket will be created</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <TicketCreateForm />
-      </CardContent>
-    </Card>
+    <CardCompact 
+      className="w-full max-w-[420px] self-center"
+      description="Create a new ticket"
+      title="Create Ticket"
+      content={<TicketUpsertForm />}
+    / >
 
     {/* error boundary is more fine-grained  */}
     <ErrorBoundary fallback={<Placeholder label="Something went wrong" icon=<LucideShieldX />/>}>

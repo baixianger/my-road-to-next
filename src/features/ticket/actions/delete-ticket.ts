@@ -8,6 +8,7 @@ import { ticketsPath } from '@/paths';
 
 
 export const deleteTicket = async (ticketId: string) => {
+  
   await prisma.ticket.delete({
     where: {
       id: ticketId,
