@@ -11,15 +11,14 @@
 // );
 
 import clsx from "clsx";
-import { LucideEdit, LucideSquareArrowOutUpRight, LucideTrash } from "lucide-react";
+import {
+  LucideEdit,
+  LucideSquareArrowOutUpRight,
+  LucideTrash,
+} from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteTicket } from "@/features/ticket/actions/delete-ticket";
 import { TICKET_ICONS } from "@/features/ticket/constants";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
@@ -33,14 +32,13 @@ import { ticketPath, ticketEditPath } from "@/paths";
 // };
 // 更好的方式是用类型推导来获取ticket的类型
 type TicketItemProps = {
-  ticket: 
-  | Awaited<ReturnType<typeof getTickets>>[number]
-  | Awaited<ReturnType<typeof getTicket>>;
+  ticket:
+    | Awaited<ReturnType<typeof getTickets>>[number]
+    | Awaited<ReturnType<typeof getTicket>>;
   isDetail?: boolean;
 };
 
 export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
-
   // check null or the certain type wouldn't have the id property
   // if (!ticket) {
   //   return null;
@@ -53,10 +51,10 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
       <Link prefetch href={ticketPath(ticket.id)}>
         <LucideSquareArrowOutUpRight className="h-4 w-4" />
       </Link>
-    </Button>  
+    </Button>
   );
 
-  const handleDeleteTicket = async () => { 
+  const handleDeleteTicket = async () => {
     // "use server"; //It is not allowed to define inline "use server" annotated Server Actions in Client Components.
     // await prisma.ticket.delete({
     //   where: {
@@ -64,14 +62,13 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     //   },
     // });
     await deleteTicket(ticket.id); //相当于建立了一个网管，从浏览器端的onClick监听器调用服务器操作。
-  }
+  };
 
   const deleteButton = (
     <Button variant="outline" size="icon" onClick={handleDeleteTicket}>
       <LucideTrash className="h-4 w-4" />
     </Button>
   );
-
 
   const editButton = (
     <Button variant="outline" size="icon">
@@ -82,40 +79,49 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
   );
 
   return (
-    <div className={clsx("w-full max-w-[420px] flex gap-x-1", {
-      "max-w-[580px]": isDetail,
-      "max-w-[420px]": !isDetail,
-    })}>
+    <div
+      className={clsx("w-full max-w-[420px] flex gap-x-1", {
+        "max-w-[580px]": isDetail,
+        "max-w-[420px]": !isDetail,
+      })}
+    >
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="flex gap-x-2 items-center">
             <span>{TICKET_ICONS[ticket.status]}</span>
-            <span className="truncate max-w-70">{ticket.title}</span> 
+            <span
+              className={clsx({
+                "truncate max-w-70": !isDetail,
+                "line-clamp-3": isDetail,
+              })}
+            >
+              {ticket.title}
+            </span>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <span className={clsx("whitespace-break-spaces",{
-            "line-clamp-3" : !isDetail
-          })}>
+          <span
+            className={clsx("whitespace-break-spaces", {
+              "line-clamp-3": !isDetail,
+            })}
+          >
             {ticket.content}
           </span>
         </CardContent>
       </Card>
       <div className="flex flex-col gap-y-1">
-      {isDetail? (
-        <>
-          {editButton}
-          {deleteButton}
-        </>
+        {isDetail ? (
+          <>
+            {editButton}
+            {deleteButton}
+          </>
         ) : (
-        <>
-          {editButton}
-          {detailButton}
-        </>  
+          <>
+            {editButton}
+            {detailButton}
+          </>
         )}
       </div>
     </div>
   );
-}
-
-
+};
