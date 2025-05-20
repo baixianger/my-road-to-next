@@ -27,7 +27,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
 
   useActionFeedback({
     actionState,
-    option: {
+    options: {
       onSuccess: ({ actionState }) => {
         // handle success
         console.log(actionState.message)

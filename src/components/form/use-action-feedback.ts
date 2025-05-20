@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ActionState } from "./to-action-state";
 
 type OnArgs = {
@@ -12,7 +12,7 @@ type UseActionFeedbackOptions = {
 
 type useActionFeedbackProps = {
   actionState: ActionState;
-  option: UseActionFeedbackOptions;
+  options: UseActionFeedbackOptions;
 };
 
 /*
@@ -30,15 +30,22 @@ const options = useMemo(() => ({
 方法之三：使用 useRef 来存储上次的actionState，对比时间戳。
 */
 
-const useActionFeedback = ({ actionState, option }: useActionFeedbackProps) => {
+const useActionFeedback = ({ actionState, options }: useActionFeedbackProps) => {
+
+  const prevTimestamp = useRef(actionState.timestamp); // 初始化ref,跨渲染周期保存值
+  const isUpdate = actionState.timestamp !== prevTimestamp.current;
+
   useEffect(() => {
+    if (!isUpdate) return;
     if (actionState.status === "SUCCESS") {
-      option.onSuccess?.({actionState});
+      options.onSuccess?.({actionState});
     }
     if (actionState.status === "ERROR") {
-      option.onError?.({actionState});
+      options.onError?.({actionState});
     }
-  }, [actionState]); // when ever actionState changes, the effect will be called
+
+    prevTimestamp.current = actionState.timestamp; // update the timestamp
+  }, [isUpdate, actionState, options]); // when ever actionState changes, the effect will be called
 }
 
 export { useActionFeedback };
