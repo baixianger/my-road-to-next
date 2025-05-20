@@ -9,8 +9,7 @@ import { SubmitButton } from "@/components/form/submit-button";
 import { useActionState } from "react";
 import { FieldError } from "./field-error";
 import { EMPTY_ACTION_STATE } from "../../../components/form/to-action-state";
-import { useActionFeedback } from "@/components/form/use-action-feedback";
-import { toast } from "sonner";
+import { Form } from "@/components/form/form";
 
 type TicketUpsertFormProps = {
   ticket?: Awaited<ReturnType<typeof getTicket>>;
@@ -26,20 +25,9 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
     EMPTY_ACTION_STATE
   );
 
-  useActionFeedback({
-    actionState,
-    options: {
-      onSuccess: ({ actionState }) => {
-        if (actionState.message) toast.success(actionState.message);//仅显示提交状态，不toast文本框错误。
-      },
-      onError: ({ actionState }) => {
-        if (actionState.message) toast.error(actionState.message);
-      },
-    },
-  });
 
   return (
-    <form action={action} className="flex flex-col gap-y-2">
+    <Form action={action} actionState={actionState}>
       <Input type="hidden" name="id" defaultValue={ticket?.id} />
 
       <Label htmlFor="title">Title</Label>
@@ -64,7 +52,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       <FieldError actionState={actionState} name="content" />
 
       <SubmitButton label={ticket ? "Update" : "Create"} />
-    </form>
+    </Form>
   );
 };
 
