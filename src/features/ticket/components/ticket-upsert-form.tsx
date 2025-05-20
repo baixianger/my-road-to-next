@@ -10,6 +10,7 @@ import { useActionState } from "react";
 import { FieldError } from "./field-error";
 import { EMPTY_ACTION_STATE } from "../../../components/form/to-action-state";
 import { useActionFeedback } from "@/components/form/use-action-feedback";
+import { toast } from "sonner";
 
 type TicketUpsertFormProps = {
   ticket?: Awaited<ReturnType<typeof getTicket>>;
@@ -29,12 +30,10 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
     actionState,
     options: {
       onSuccess: ({ actionState }) => {
-        // handle success
-        console.log(actionState.message)
+        if (actionState.message) toast.success(actionState.message);//仅显示提交状态，不toast文本框错误。
       },
       onError: ({ actionState }) => {
-        // handle error
-        console.log(actionState.message)
+        if (actionState.message) toast.error(actionState.message);
       },
     },
   });
