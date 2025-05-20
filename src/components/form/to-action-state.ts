@@ -23,7 +23,7 @@ export const fromErrorToActionState = (
   if (error instanceof ZodError) { // ZodError is a specific error type from the zod library
     return {
       status: "ERROR",
-      message: error.issues.map((issue) => issue.message).join(", "),
+      message: "",//error.issues.map((issue) => issue.message).join(", "),
       fieldErrors: error.flatten().fieldErrors,
       payload: formData,
       timestamp: Date.now(),
