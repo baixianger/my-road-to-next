@@ -1,4 +1,4 @@
-import { ActionState } from "../actions/to-action-state";
+import { ActionState } from "../../../components/form/to-action-state";
 
 const FieldError = ({actionState, name}: {actionState: ActionState, name: string}) => {
   const message = actionState.fieldErrors[name]?.[0];
