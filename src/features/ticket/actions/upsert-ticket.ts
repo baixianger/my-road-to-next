@@ -6,6 +6,7 @@ import { ticketsPath } from "@/paths";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { fromErrorToActionState, ActionState, toActionState } from "../../../components/form/to-action-state";
+import { setCookieByKey } from "@/action/cookies";
 
 
 const upsertTicketSchema = z.object({
@@ -43,7 +44,8 @@ export const upsertTicket = async (
 
   revalidatePath(ticketsPath());
   if (id) {
-    redirect(ticketsPath());
+    setCookieByKey("toast", "Ticket Updated");
+    redirect(ticketsPath()); // 之后代码不会执行
   }
   return toActionState("SUCCESS", "Ticket created successfully");
 };

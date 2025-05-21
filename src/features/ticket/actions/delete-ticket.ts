@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { ticketsPath } from '@/paths';
+import { setCookieByKey } from "@/action/cookies";
 // import { ticketPath } from '@/paths/ticket-paths';
 
 
@@ -23,6 +24,6 @@ export const deleteTicket = async (ticketId: string) => {
   // 同时也要用errorboundary处理500服务端错误，自定义500.js页面或者用error boundary处理错误
   // https://nextjs.org/docs/pages/building-your-application/configuring/error-handling#handling-server-errors
   // revalidatePath(ticketPath(ticketId));
-
+  setCookieByKey("toast", "Ticket Deleted");
   redirect(ticketsPath());
 }
