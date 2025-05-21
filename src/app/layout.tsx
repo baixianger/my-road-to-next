@@ -45,7 +45,7 @@ export default function RootLayout({
           >
             {children}
             </main>
-            <Toaster /> {/* Sonner toast component */}
+            <Toaster expand/> {/* Sonner toast component */}
           </ThemeProvider>
       </body>
     </html>

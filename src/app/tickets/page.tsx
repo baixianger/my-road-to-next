@@ -7,7 +7,7 @@ import { Spinner } from "@/components/spinner";
 import { TicketList } from "@/features/ticket/components/ticket-list";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { CardCompact } from "@/components/card-compact";
-
+import { RedirectToast } from "@/components/redirect-toast";
 
 // 在生产力环境部署，build后此页面会被编译成一个静态页面（○），
 // 如果是对于博客这种新闻类的页面，影响不大；但是对于数据变化频繁的页面，比如票务系统，
@@ -26,24 +26,33 @@ import { CardCompact } from "@/components/card-compact";
 
 const TicketsPage = () => {
   return (
-  <div className="flex-1 flex flex-col gap-y-8">
-    <Heading title="Tickets" description="All your tickets at one place"/>
+    <>
+      <div className="flex-1 flex flex-col gap-y-8">
+        <Heading title="Tickets" description="All your tickets at one place" />
 
-    {/* 添加创建ticket的输入卡片 */}
-    <CardCompact 
-      className="w-full max-w-[420px] self-center"
-      description="Create a new ticket"
-      title="Create Ticket"
-      content={<TicketUpsertForm />}
-    / >
+        {/* 添加创建ticket的输入卡片 */}
+        <CardCompact
+          className="w-full max-w-[420px] self-center"
+          description="Create a new ticket"
+          title="Create Ticket"
+          content={<TicketUpsertForm />}
+        />
 
-    {/* error boundary is more fine-grained  */}
-    <ErrorBoundary fallback={<Placeholder label="Something went wrong" icon=<LucideShieldX />/>}>
-      <Suspense fallback={<Spinner />}> 
-        <TicketList />
-      </Suspense>
-    </ErrorBoundary>
-  </div>)
+        {/* error boundary is more fine-grained  */}
+        <ErrorBoundary
+          fallback={
+            <Placeholder label="Something went wrong" icon=<LucideShieldX /> />
+          }
+        >
+          <Suspense fallback={<Spinner />}>
+            <TicketList />
+          </Suspense>
+        </ErrorBoundary>
+        
+      </div>
+      <RedirectToast />
+    </>
+  );
 };
 
 export default TicketsPage;

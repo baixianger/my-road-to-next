@@ -44,7 +44,7 @@ export const upsertTicket = async (
 
   revalidatePath(ticketsPath());
   if (id) {
-    setCookieByKey("toast", "Ticket Updated");
+    await setCookieByKey("toast", "Ticket Updated");
     redirect(ticketsPath()); // 之后代码不会执行
   }
   return toActionState("SUCCESS", "Ticket created successfully");
