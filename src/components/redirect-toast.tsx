@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { getCookieByKey, deleteCookieByKey } from "@/action/cookies";
+import { usePathname } from "next/navigation";
 
 export const RedirectToast = () => {
   /** 
@@ -11,6 +12,7 @@ export const RedirectToast = () => {
    * 如果不想在开发模式下打印两次，可以使用strictMode
    * 用<StrictMode>包裹你的应用程序，这样在开发模式下，useEffect只会被调用一次。
   */
+  const pathname = usePathname();
   useEffect(() => {
     const checkToast = async () => {
       try {
@@ -26,7 +28,7 @@ export const RedirectToast = () => {
     };
     
     checkToast();
-  }, []);
+  }, [pathname]);
 
   return null;
 };

@@ -7,7 +7,7 @@ import { Spinner } from "@/components/spinner";
 import { TicketList } from "@/features/ticket/components/ticket-list";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { CardCompact } from "@/components/card-compact";
-import { RedirectToast } from "@/components/redirect-toast";
+
 
 // 在生产力环境部署，build后此页面会被编译成一个静态页面（○），
 // 如果是对于博客这种新闻类的页面，影响不大；但是对于数据变化频繁的页面，比如票务系统，
@@ -50,7 +50,7 @@ const TicketsPage = () => {
         </ErrorBoundary>
         
       </div>
-      <RedirectToast />
+
     </>
   );
 };
