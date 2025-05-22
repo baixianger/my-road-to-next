@@ -22,7 +22,9 @@ export const tickets = Array.from({ length: 4 }, (_, i) => {
       title: `Ticket ${id}`,
       content: `This is the description for ticket ${id}`,
       status: ['OPEN', 'DONE', 'RUNNING', 'CLOSED'][i % 4] as TicketStatus,
-      priority: ['LOW', 'MEDIUM', 'HIGH'][i % 3] as TicketPriority
+      priority: ['LOW', 'MEDIUM', 'HIGH'][i % 3] as TicketPriority,
+      deadline: new Date(Date.now() + (i + 1) * 24 * 60 * 60 * 1000).toString(), // string
+      bounty: 100 * (i + 1)
   };
 });
 
