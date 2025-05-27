@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { fromErrorToActionState, ActionState, toActionState } from "../../../components/form/to-action-state";
 import { setCookieByKey } from "@/action/cookies";
+import { toCent } from "@/utils/currency";
 
 
 const upsertTicketSchema = z.object({
@@ -16,9 +17,12 @@ const upsertTicketSchema = z.object({
   content: z.string()
     .min(1, { message: "Content is required" })
     .max(1000, { message: "Content must be less than 1000 characters" }),
+  deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Is required" }),
+  bounty: z.coerce.number().positive({ message: "Bounty must be a positive number" }),
 });
 
 export const upsertTicket = async (
+  // id: string | undefined, 这里放表单里action动作bind的额外参数
   _actionState: ActionState,
   formData: FormData
 ) => {
@@ -29,14 +33,20 @@ export const upsertTicket = async (
     const data = upsertTicketSchema.parse({
       title: formData.get('title'),
       content: formData.get('content'),
+      deadline: formData.get('deadline'),
+      bounty: formData.get('bounty'),
     });
 
+    const dbData = {
+      ...data,
+      bounty: toCent(data.bounty), // 将美元转换为分
+    }
     await prisma.ticket.upsert({
       where: {
         id: id,
       },
-      update: data,
-      create: data,
+      update: dbData,
+      create: dbData,
     });
   } catch (error) {
     return fromErrorToActionState(error, formData);

@@ -18,12 +18,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteTicket } from "@/features/ticket/actions/delete-ticket";
 import { TICKET_ICONS } from "@/features/ticket/constants";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
 import { getTickets } from "@/features/ticket/queries/get-tickets";
 import { ticketPath, ticketEditPath } from "@/paths";
+import { toCurrencyFromCent } from "@/utils/currency";
 
 // import { Ticket } from "@prisma/client";
 // type TicketItemProps = {
@@ -108,6 +109,10 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
             {ticket.content}
           </span>
         </CardContent>
+        <CardFooter className="flex justify-between">  
+          <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+          <p className="text-sm text-muted-foreground">{toCurrencyFromCent(ticket.bounty)}</p>
+        </CardFooter>
       </Card>
       <div className="flex flex-col gap-y-1">
         {isDetail ? (
