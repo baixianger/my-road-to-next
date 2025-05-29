@@ -27,15 +27,21 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
     EMPTY_ACTION_STATE
   );
   const datePickerImperativeHandleRef =
-    useRef<ImperativeHandleFromDatePicker>(null)!;
+    useRef<ImperativeHandleFromDatePicker>(null);
 
   const handleSuccess = () => {
-    datePickerImperativeHandleRef.current?.reset();
+    // 如果提交成功，重置日期选择器，并将日期置为灰色状态
+    datePickerImperativeHandleRef.current?.reset?.();
+  };
+
+  const handleError = () => {
+    // 如果输入的信息有误，保持日期处于非灰色状态，提示用户输入错误
+    datePickerImperativeHandleRef.current?.keep?.();
   };
 
 
   return (
-    <Form action={action} actionState={actionState} onSuccess={handleSuccess}>
+    <Form action={action} actionState={actionState} onSuccess={handleSuccess} onError={handleError}>
       <Input type="hidden" name="id" defaultValue={ticket?.id} />
 
       <Label htmlFor="title">Title</Label>
@@ -63,6 +69,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
         <div className="w-1/2">
           <Label htmlFor="deadline">Deadline</Label>
           <DatePicker
+            // key={actionState.timestamp}
             id="deadline"
             name="deadline"
             defaultValue={
