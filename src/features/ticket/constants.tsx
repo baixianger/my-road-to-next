@@ -8,3 +8,10 @@ export const TICKET_ICONS = {
   RUNNING: <Pencil />,
   CLOSED: <CircleX />,
 };
+
+export const TICKET_STATUS_LABELS = {
+  OPEN: "Open",
+  DONE: "Done",
+  RUNNING: "In Progress",
+  CLOSED: "Closed",
+};

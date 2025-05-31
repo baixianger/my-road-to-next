@@ -1,12 +1,20 @@
+"use client";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getTicket } from "../queries/get-ticket";
 import { getTickets } from "../queries/get-tickets";
 import { LucideTrash } from "lucide-react";
+import { TICKET_STATUS_LABELS } from "../constants";
+import { TicketStatus } from "@prisma/client";
+import { updateTicketStatus } from "../actions/update-ticket-status";
+import { toast } from "sonner";
 
 type TicketMoreMenuProps = {
   ticket:
@@ -23,11 +31,40 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
     </DropdownMenuItem>
   );
 
+  const handleUpdateTicketStatus = async (status: string) => {
+    const result = await updateTicketStatus(ticket.id, status as TicketStatus);
+    if (result.status === "ERROR") {
+      toast.error(result.message);
+    } else {
+      toast.success(result.message);
+    }
+  };
+
+  const ticketStatusRadioGroup = (
+    <DropdownMenuRadioGroup
+      value={ticket.status}
+      onValueChange={handleUpdateTicketStatus}
+    >
+      {Object.keys(TICKET_STATUS_LABELS).map((status) => (
+        <DropdownMenuRadioItem
+          key={status}
+          value={status}
+          className="flex items-center"
+        >
+          {TICKET_STATUS_LABELS[status as TicketStatus]}
+          {/* 或者 status as keyof type of TICKET_STATUS_LABELS */}
+        </DropdownMenuRadioItem>
+      ))}
+    </DropdownMenuRadioGroup>
+  );
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent side="right" className="w-56">
-        <DropdownMenuItem>{deleteButton}</DropdownMenuItem>
+        {ticketStatusRadioGroup}
+        <DropdownMenuSeparator />
+        {deleteButton}
       </DropdownMenuContent>
     </DropdownMenu>
   );
