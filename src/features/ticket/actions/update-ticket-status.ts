@@ -7,6 +7,8 @@ import { TicketStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export const updateTicketStatus = async (id: string, status: TicketStatus) => {
+  // mimic time deley
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
   try{
     await prisma.ticket.update({
       where: { id: id },
