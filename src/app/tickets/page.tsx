@@ -7,6 +7,7 @@ import { Spinner } from "@/components/spinner";
 import { TicketList } from "@/features/ticket/components/ticket-list";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { CardCompact } from "@/components/card-compact";
+import { getBaseUrl } from "@/utils/url";
 
 
 // 在生产力环境部署，build后此页面会被编译成一个静态页面（○），
@@ -25,6 +26,7 @@ import { CardCompact } from "@/components/card-compact";
 // 具体操作详见delete-ticket.ts内的注释
 
 const TicketsPage = () => {
+  console.log(getBaseUrl());
   return (
     <>
       <div className="flex-1 flex flex-col gap-y-8">
