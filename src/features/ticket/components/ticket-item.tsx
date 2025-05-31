@@ -33,6 +33,7 @@ import { getTickets } from "@/features/ticket/queries/get-tickets";
 import { ticketPath, ticketEditPath } from "@/paths";
 import { toCurrencyFromCent } from "@/utils/currency";
 import { TicketMoreMenu } from "./ticket-more-menu";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 
 // import { Ticket } from "@prisma/client";
 // type TicketItemProps = {
@@ -73,11 +74,22 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     await deleteTicket(ticket.id); //相当于建立了一个网管，从浏览器端的onClick监听器调用服务器操作。
   };
 
-  const deleteButton = (
-    <Button variant="outline" size="icon" onClick={handleDeleteTicket}>
-      <LucideTrash className="h-4 w-4" />
-    </Button>
-  );
+  // const deleteButton = (
+  //   <Button variant="outline" size="icon" onClick={handleDeleteTicket}>
+  //     <LucideTrash className="h-4 w-4" />
+  //   </Button>
+  // );
+
+  const deleteButton =(
+    <ConfirmDialog 
+      action={handleDeleteTicket}
+      trigger={
+        <Button variant="outline" size="icon">
+          <LucideTrash className="h-4 w-4" />
+        </Button>
+      }
+    />
+  )
 
   const editButton = (
     <Button variant="outline" size="icon">
