@@ -11,12 +11,16 @@ export const createTicket = async (formData: FormData) => {
   const data = {
     title: formData.get('title'),
     content: formData.get('content'),
+    deadline: formData.get('deadline'),
+    bounty: formData.get('bounty'),
   };
 
   await prisma.ticket.create({
     data: {
       title: data.title as string,
       content: data.content as string,
+      deadline: data.deadline as string,
+      bounty: Number(data.bounty), 
     },
   });
 

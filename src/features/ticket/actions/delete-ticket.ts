@@ -9,12 +9,15 @@ import { setCookieByKey } from "@/action/cookies";
 
 
 export const deleteTicket = async (ticketId: string) => {
+
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // 模拟延迟，实际应用中可以去掉
   
   await prisma.ticket.delete({
     where: {
       id: ticketId,
     },
   });
+
 
   // 重新验证路径，刷新数据。但是⚠️此处用于服务端的动作，比如用户操作之后，删除/提交。
   // https://nextjs.org/docs/app/deep-dive/caching#revalidatepath
@@ -25,5 +28,5 @@ export const deleteTicket = async (ticketId: string) => {
   // https://nextjs.org/docs/pages/building-your-application/configuring/error-handling#handling-server-errors
   // revalidatePath(ticketPath(ticketId));
   await setCookieByKey("toast", "Ticket Deleted");
-  redirect(ticketsPath());
+  redirect(ticketsPath()); // 重定向会抛出一个NextRedirect的错误，Next.js会处理这个错误并执行重定向。
 }

@@ -26,6 +26,8 @@ export const upsertTicket = async (
   _actionState: ActionState,
   formData: FormData
 ) => {
+
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // 模拟延迟，实际应用中可以去掉
   // 这里的formData是一个FormData对象，包含了表单提交的数据
   // 你可以使用formData.get('title')来获取表单字段的值
   const id = formData.get('id') as string;

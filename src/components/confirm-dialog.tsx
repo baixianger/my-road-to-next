@@ -8,8 +8,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "./ui/button";
 import { cloneElement, useState } from "react";
+import { LucideLoaderCircle } from "lucide-react";
+import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 type ConfirmDialogProps = {
   title?: string;
@@ -26,13 +28,33 @@ const useConfirmDialog = ({
 }: ConfirmDialogProps) => {
 
   const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
-  const trigger = cloneElement(dialogTrigger, {
+  const triggerElement = cloneElement(dialogTrigger, {
     onClick: () => setIsOpenDialog((state) => !state),
   });
 
+  const handleConfirm = async () => {
+    setIsPending(true);
+    setIsOpenDialog(true);
+    try {
+      await action(); // 执行删除等异步操作
+    } catch(error) {
+      if (error instanceof Error && !error.message.includes('NEXT_REDIRECT')) {
+        toast.error("Delete failed!");
+      } else {
+        toast.error("Redirect to Tickets page.");
+      }
+      setIsPending(false);
+      setIsOpenDialog(false); // 操作完成后关闭弹窗
+    } finally {
+      setIsPending(false);
+      setIsOpenDialog(false); // 操作完成后关闭弹窗
+    }
+  };
+
   const dialog = (
-    <AlertDialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
+    <AlertDialog open={isOpenDialog || isPending} onOpenChange={setIsOpenDialog}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
@@ -41,7 +63,8 @@ const useConfirmDialog = ({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Button type="submit" onClick={action}>
+            <Button type="submit" disabled={isPending} onClick={handleConfirm}>
+              {isPending && <LucideLoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
               Confirm
             </Button>
           </AlertDialogAction>
@@ -49,7 +72,7 @@ const useConfirmDialog = ({
       </AlertDialogContent>
     </AlertDialog>
   );
-  return [trigger, dialog];
+  return [triggerElement, dialog];
 };
 
 export { useConfirmDialog };
