@@ -7,32 +7,36 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
+import { cloneElement, useState } from "react";
 
 type ConfirmDialogProps = {
   title?: string;
   description?: string;
   action: () => Promise<void>;
-  trigger: React.ReactNode;
+  dialogTrigger: React.ReactElement<React.HTMLProps<HTMLElement>>;
 };
 
-const ConfirmDialog = ({
+const useConfirmDialog = ({
   title = "Are you absolutely sure?",
   description = "This action cannot be undone. This will permanently delete the item.",
   action,
-  trigger,
+  dialogTrigger,
 }: ConfirmDialogProps) => {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
+
+  const trigger = cloneElement(dialogTrigger, {
+    onClick: () => setIsOpenDialog((state) => !state),
+  });
+
+  const dialog = (
+    <AlertDialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{ title }</AlertDialogTitle>
-          <AlertDialogDescription>
-            { description }
-          </AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -45,6 +49,7 @@ const ConfirmDialog = ({
       </AlertDialogContent>
     </AlertDialog>
   );
+  return [trigger, dialog];
 };
 
-export { ConfirmDialog };
+export { useConfirmDialog };
