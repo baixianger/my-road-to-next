@@ -39,7 +39,7 @@ const signIn = async (_actionState: ActionState, formData: FormData) => {
 
     const sessionToken = generateSessionToken();
     const session = await createSession(user.id, sessionToken);
-    await setSessionTokenCookie(session.id, session.expiresAt);
+    await setSessionTokenCookie(sessionToken, session.expiresAt);
     
   } catch (error) {
     return fromErrorToActionState(error, formData);

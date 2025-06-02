@@ -20,6 +20,7 @@ export async function createSession(userId: string, token: string): Promise<Sess
   await prisma.session.create({
     data: session
   });
+
   return session;
 }
 
@@ -33,6 +34,7 @@ export async function validateSessionToken(token: string): Promise<SessionValida
       user: true
     }
   });
+
 
   // if there is no session, return null
   if (result === null) {

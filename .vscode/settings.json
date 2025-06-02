@@ -1,10 +1,4 @@
 {
-  "editor.tabSize": 2,
-  "notebook.defaultFormatter": "ms-python.pylint",
-  "[typescript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    },
-  "[typescriptreact]": {
-      "editor.defaultFormatter": "vscode.typescript-language-features"
+    "workbench.sideBar.location": "right",
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   }
-}
