@@ -26,7 +26,7 @@ const CardCompact = ({
       <CardContent>
         {content}
       </CardContent>
-      {footer && <div className="p-4">{footer}</div>}
+      {footer && <div className="flex justify-between items-center px-6">{footer}</div>}
     </Card>
   )
 };

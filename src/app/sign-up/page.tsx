@@ -12,7 +12,7 @@ const SignUpPage = () => {
         description="Create an account to get started."
         content={<SignUpForm/>}
         footer={
-          <Link href={signInPath()}>Have an account? Sign In now.</Link>
+          <Link className="text-sm text-muted-foreground" href={signInPath()}>Have an account? Sign In now.</Link>
         }
       />
     </div>

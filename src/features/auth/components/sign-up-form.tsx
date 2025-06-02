@@ -4,7 +4,6 @@ import { Form } from "@/components/form/form";
 import { EMPTY_ACTION_STATE } from "@/components/form/to-action-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { signUp } from "@/features/auth/actions/sign-up";
 import { FieldError } from "@/features/ticket/components/field-error";
 import { useActionState } from "react";
@@ -14,11 +13,21 @@ const SignUpForm = () => {
 
   return (
     <Form actionState={actionState} action={action}>
-      <Label htmlFor="username">Username</Label>
-      <Input name="username" placeholder="Username" required />
+      <Input
+        name="username"
+        placeholder="Username"
+        defaultValue={actionState.payload?.get("username") as string}
+        required
+      />
       <FieldError actionState={actionState} name={"username"} />
 
-      <Input name="email" type="email" placeholder="Email" required />
+      <Input
+        name="email"
+        type="email"
+        placeholder="Email"
+        defaultValue={actionState.payload?.get("email") as string}
+        required
+      />
       <FieldError actionState={actionState} name={"email"} />
 
       <Input name="password" type="password" placeholder="Password" required />
@@ -31,7 +40,7 @@ const SignUpForm = () => {
         required
       />
       <FieldError actionState={actionState} name={"confirmPassword"} />
-      
+
       <Button type="submit">Sign Up</Button>
     </Form>
   );
