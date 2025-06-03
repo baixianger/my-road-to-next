@@ -12,7 +12,11 @@ export const getTicket = async (ticketId: string): Promise<TicketWithUser> => {
       id: ticketId,
     },
     include: {
-      user: true,
+      user: {
+        select: {
+          username: true,
+        },
+      },
     },
   });
 };

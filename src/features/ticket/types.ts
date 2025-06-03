@@ -2,6 +2,10 @@ import { Prisma } from "@prisma/client";
 
 export type TicketWithUser = Prisma.TicketGetPayload<{
   include: {
-    user: true;
+    user: {
+      select: {
+        username: true, // filter passwordHash
+      },
+    },
   };
 }>;

@@ -32,6 +32,7 @@ export const upsertTicket = async (
   const { user } = await getCurrentSession();
 
   if (!user) {
+    await setCookieByKey("toast", "Please sign in to create a ticket");
     redirect(signInPath());
   }
 

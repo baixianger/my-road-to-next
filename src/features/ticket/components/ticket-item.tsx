@@ -16,16 +16,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TICKET_ICONS } from "@/features/ticket/constants";
-import { getTicket } from "@/features/ticket/queries/get-ticket";
-import { getTickets } from "@/features/ticket/queries/get-tickets";
 import { ticketPath, ticketEditPath } from "@/paths";
 import { toCurrencyFromCent } from "@/utils/currency";
 import { TicketMoreMenu } from "./ticket-more-menu";
+import { TicketWithUser } from "../types";
 
 type TicketItemProps = {
-  ticket:
-    | Awaited<ReturnType<typeof getTickets>>[number]
-    | (Awaited<ReturnType<typeof getTicket>>);
+  ticket: TicketWithUser;
   isDetail?: boolean;
 };
 

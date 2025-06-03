@@ -43,7 +43,7 @@ const TicketsPage = () => {
         {/* error boundary is more fine-grained  */}
         <ErrorBoundary
           fallback={
-            <Placeholder label="Something went wrong" icon=<LucideShieldX /> />
+            <Placeholder label="Something went wrong" icon={<LucideShieldX />} />
           }
         >
           <Suspense fallback={<Spinner />}>
