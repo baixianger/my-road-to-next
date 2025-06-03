@@ -25,7 +25,7 @@ import { TicketMoreMenu } from "./ticket-more-menu";
 type TicketItemProps = {
   ticket:
     | Awaited<ReturnType<typeof getTickets>>[number]
-    | Awaited<ReturnType<typeof getTicket>>;
+    | (Awaited<ReturnType<typeof getTicket>>);
   isDetail?: boolean;
 };
 
@@ -91,7 +91,7 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
           </span>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+          <p className="text-sm text-muted-foreground">{ticket.deadline} by {ticket.user.username}</p>
           <p className="text-sm text-muted-foreground">
             {toCurrencyFromCent(ticket.bounty)}
           </p>
