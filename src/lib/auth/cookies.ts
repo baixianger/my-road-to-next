@@ -27,7 +27,6 @@ export const getCurrentSession = cache(
   async (): Promise<SessionValidationResult> => {
     const cookieStore = await cookies();
     const token = cookieStore.get(SESSION_COOKIE_NAME)?.value ?? null;
-    console.log('Token:', token);
     if (token === null) {
       return { session: null, user: null };
     }
