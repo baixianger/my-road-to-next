@@ -20,6 +20,9 @@ const signInSchema = z.object({
 });
 
 const signIn = async (_actionState: ActionState, formData: FormData) => {
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
   try {
     const { email, password } = signInSchema.parse(
       Object.fromEntries(formData.entries())

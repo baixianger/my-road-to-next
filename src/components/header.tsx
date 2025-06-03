@@ -7,23 +7,17 @@ import { homePath, ticketsPath, signInPath, signUpPath } from "@/paths";
 import { ThemeSwitcher } from "./theme/theme-switcher";
 import { SubmitButton } from "./form/submit-button";
 import { signOut } from "@/features/auth/actions/sign-out";
-import { useEffect, useState } from "react";
-import { getCurrentSession } from "@/lib/auth/cookies";
-import { User } from "@prisma/client";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 
 
 const Header = () => {
-  const [ user, setUser] = useState<User | null>(null)
 
-  useEffect(() => {
-    
-    const fetchUser = async () => {
-      const { user } = await getCurrentSession();
-      setUser(user);
-    }
-    fetchUser();
-  },[])
-  
+  const {user, isFetched } = useAuth();
+
+  if (!isFetched) {
+    return null;
+  }
+ 
   const navItems = user ? (
     <>
       <Link
@@ -50,6 +44,7 @@ const Header = () => {
   return (
     <nav
       className="
+				animate-header-from-top
 				supports-backdrop-blur:bg-background/60 
 				fixed top-0 left-0 right-0 z-20 
 				border-b bg-background/95 backdrop-blur 
