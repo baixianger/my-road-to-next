@@ -42,6 +42,8 @@ model Ticket {
   bounty        Int             //@default(0)
   userId        String
   user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // if not Cascade, when deleting, we should delete the tickets first, then delete the user.
+  // so if Cascade, when deleting user, the related tickets will be deleted automatically.
 
   @@index([userId])
 }

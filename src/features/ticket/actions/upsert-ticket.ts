@@ -8,6 +8,8 @@ import { redirect } from "next/navigation";
 import { fromErrorToActionState, ActionState, toActionState } from "../../../components/form/to-action-state";
 import { setCookieByKey } from "@/action/cookies";
 import { toCent } from "@/utils/currency";
+import { getCurrentSession } from "@/lib/auth/cookies";
+import { signInPath } from "@/paths";
 
 
 const upsertTicketSchema = z.object({
@@ -27,6 +29,12 @@ export const upsertTicket = async (
   formData: FormData
 ) => {
 
+  const { user } = await getCurrentSession();
+
+  if (!user) {
+    redirect(signInPath());
+  }
+
   await new Promise((resolve) => setTimeout(resolve, 1000)); // 模拟延迟，实际应用中可以去掉
   // 这里的formData是一个FormData对象，包含了表单提交的数据
   // 你可以使用formData.get('title')来获取表单字段的值
@@ -42,10 +50,11 @@ export const upsertTicket = async (
     const dbData = {
       ...data,
       bounty: toCent(data.bounty), // 将美元转换为分
+      userId: user.id,
     }
     await prisma.ticket.upsert({
       where: {
-        id: id,
+        id: id, // 这里还欠缺检查当前从cookie里获取的id是否是ticket的所有者的逻辑
       },
       update: dbData,
       create: dbData,
