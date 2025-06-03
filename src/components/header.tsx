@@ -1,4 +1,4 @@
-
+"use client";
 import { LucideKanban, LucideLogOut } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
@@ -7,13 +7,23 @@ import { homePath, ticketsPath, signInPath, signUpPath } from "@/paths";
 import { ThemeSwitcher } from "./theme/theme-switcher";
 import { SubmitButton } from "./form/submit-button";
 import { signOut } from "@/features/auth/actions/sign-out";
+import { useEffect, useState } from "react";
 import { getCurrentSession } from "@/lib/auth/cookies";
+import { User } from "@prisma/client";
 
-// 这里我们在header内部调用了cookie相关的方法，所有包含header的页面都会变成动态的。
-const Header = async () => {
 
-  const {session, user }= await getCurrentSession();
+const Header = () => {
+  const [ user, setUser] = useState<User | null>(null)
 
+  useEffect(() => {
+    
+    const fetchUser = async () => {
+      const { user } = await getCurrentSession();
+      setUser(user);
+    }
+    fetchUser();
+  },[])
+  
   const navItems = user ? (
     <>
       <Link
