@@ -13,6 +13,19 @@
 */
 import {PrismaClient} from '@prisma/client';
 import { TicketPriority, TicketStatus } from '@prisma/client';
+import { hashPassword } from '@/lib/auth/utils';
+
+
+const users = [
+  {
+    username: "admin",
+    email: "admin@admin.com",
+  },
+  {
+    username: "user",
+    email: "baixianger@gmail.com",
+  },
+];
 
 // Initialize the array with the correct type
 export const tickets = Array.from({ length: 4 }, (_, i) => {
@@ -48,11 +61,24 @@ const prisma = new PrismaClient();
   );
 3. 用 createMany */
 const seed = async () => {
+
   console.log("Deleting existing data...");
-  await prisma.ticket.deleteMany({}); // 删除所有数据
+  await prisma.user.deleteMany({});
+  await prisma.ticket.deleteMany({});
+
   console.log("Seeding database...");
+  const psdHash = await hashPassword("11111111");
+  const dbUsers = await prisma.user.createManyAndReturn({
+    data: users.map((user) => ({
+      ...user,
+      passwordHash: psdHash,
+    })),
+  });
   await prisma.ticket.createMany({
-    data: tickets,
+    data: tickets.map((ticket) => ({
+      ...ticket,
+      userId: dbUsers[0].id,
+    })),
   });
   console.log("Seeding completed.");
 }
