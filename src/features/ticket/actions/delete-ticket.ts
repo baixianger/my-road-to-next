@@ -1,32 +1,44 @@
 "use server"; //一般默认是server component。但是因为调用此函数的组件是client component，所以需要显示声明。
 
-import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
-import { ticketsPath } from '@/paths';
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-redirect";
+import { isOwner } from "@/features/auth/utils/is-owner";
+import { fromErrorToActionState, toActionState } from "@/components/form/to-action-state";
+import { ActionState } from "@/components/form/to-action-state";
+import { ticketsPath } from "@/paths";
 import { setCookieByKey } from "@/action/cookies";
-// import { ticketPath } from '@/paths/ticket-paths';
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 
-export const deleteTicket = async (ticketId: string) => {
+export const deleteOnSuccess = async (actionState: ActionState) => {
+  revalidatePath(ticketsPath());
+  await setCookieByKey("toast", actionState.message);
+  redirect(ticketsPath());
+};
+
+
+export const deleteTicket = async (ticketId: string) : Promise<ActionState> => {
 
   await new Promise((resolve) => setTimeout(resolve, 1000)); // 模拟延迟，实际应用中可以去掉
-  
-  await prisma.ticket.delete({
-    where: {
-      id: ticketId,
-    },
-  });
+  const { user } = await getAuthOrRedirect(); //确保用户登录，否则重定向到登录页面
+
+  try{
+    const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+    if (!ticket || !isOwner(user, ticket)) {
+      return toActionState("ERROR", "You are not authorized to delete this ticket");
+    } 
+    await prisma.ticket.delete({
+      where: {
+        id: ticketId,
+      },
+    });
+
+  } catch (error) {
+    return fromErrorToActionState(error);
+  }
 
 
-  // 重新验证路径，刷新数据。但是⚠️此处用于服务端的动作，比如用户操作之后，删除/提交。
-  // https://nextjs.org/docs/app/deep-dive/caching#revalidatepath
-  revalidatePath(ticketsPath());
+  return toActionState("SUCCESS", "Ticket deleted successfully");
 
-  // 此处配合generateStaticParams使用，
-  // 同时也要用errorboundary处理500服务端错误，自定义500.js页面或者用error boundary处理错误
-  // https://nextjs.org/docs/pages/building-your-application/configuring/error-handling#handling-server-errors
-  // revalidatePath(ticketPath(ticketId));
-  await setCookieByKey("toast", "Ticket Deleted");
-  redirect(ticketsPath()); // 重定向会抛出一个NextRedirect的错误，Next.js会处理这个错误并执行重定向。
-}
+};

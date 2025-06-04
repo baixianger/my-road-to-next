@@ -16,7 +16,8 @@ import { TicketStatus } from "@prisma/client";
 import { updateTicketStatus } from "../actions/update-ticket-status";
 import { toast } from "sonner";
 import { useConfirmDialog } from "@/components/confirm-dialog";
-import { deleteTicket } from "../actions/delete-ticket";
+import { deleteTicket, deleteOnSuccess } from "../actions/delete-ticket";
+import { ActionState } from "@/components/form/to-action-state";
 
 type TicketMoreMenuProps = {
   ticket:
@@ -26,21 +27,27 @@ type TicketMoreMenuProps = {
 };
 
 const TicketMoreMenu = ({ ticket, menuTrigger }: TicketMoreMenuProps) => {
-
-  const handleDeleteTicket = async () => {
-    await deleteTicket(ticket.id); //相当于建立了一个网管，从浏览器端的onClick监听器调用服务器操作。
+ 
+  const deleteOnErrorHandler = async(actionState: ActionState) => {
+    toast.error(actionState.message);
   };
 
+  const deleteOnSuccessHandler = async(actionState: ActionState) => {
+    deleteOnSuccess(actionState);
+  };
+ 
   const [deleteButton, deleteDialog] = useConfirmDialog({
     title: "Delete Ticket",
     description: "Are you sure you want to delete this ticket? This action cannot be undone.",
-    action: handleDeleteTicket,
+    action: async () => deleteTicket(ticket.id),
     dialogTrigger: (
       <DropdownMenuItem>
         <LucideTrash className="h-4 w-4 mr-2" />
         <span>Delete</span>
       </DropdownMenuItem>
     ),
+    onSuccess: deleteOnSuccessHandler,
+    onError: deleteOnErrorHandler,
   });
 
   const handleUpdateTicketStatus = async (status: string) => {

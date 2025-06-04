@@ -17,9 +17,8 @@ const TicketPage = async ({ params }: TicketPageProps) => {
   const { ticketId } = await params;
   const ticket = await getTicket(ticketId);
 
-  if (!ticket) {
-    // 其他方式还有用？表达式来识别未定义的元素，比如 ticket?.id
-    notFound(); // 404 页面
+  if (!ticket) { // 其他方式还有用？表达式来识别未定义的元素，比如 ticket?.id
+    notFound(); // 404 页面 本级目录因为没有定义404或者not-found，所以会向上级目录查找404页面
   }
 
   return (

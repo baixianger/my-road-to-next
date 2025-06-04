@@ -11,13 +11,15 @@ import {
 import { cloneElement, useState } from "react";
 import { LucideLoaderCircle } from "lucide-react";
 import { Button } from "./ui/button";
-import { toast } from "sonner";
+import { ActionState } from "@/components/form/to-action-state";
 
 type ConfirmDialogProps = {
   title?: string;
   description?: string;
-  action: () => Promise<void>;
+  action: () => Promise<ActionState>;
   dialogTrigger: React.ReactElement<React.HTMLProps<HTMLElement>>;
+  onSuccess?: (actionState: ActionState) => Promise<void>;
+  onError?: (actionState: ActionState) => Promise<void>;
 };
 
 const useConfirmDialog = ({
@@ -25,6 +27,8 @@ const useConfirmDialog = ({
   description = "This action cannot be undone. This will permanently delete the item.",
   action,
   dialogTrigger,
+  onSuccess,
+  onError,
 }: ConfirmDialogProps) => {
 
   const [isOpenDialog, setIsOpenDialog] = useState(false);
@@ -37,20 +41,17 @@ const useConfirmDialog = ({
   const handleConfirm = async () => {
     setIsPending(true);
     setIsOpenDialog(true);
-    try {
-      await action(); // 执行删除等异步操作
-    } catch(error) {
-      if (error instanceof Error && !error.message.includes('NEXT_REDIRECT')) {
-        toast.error("Delete failed!");
-      } else {
-        toast.error("Redirect to Tickets page.");
-      }
-      setIsPending(false);
-      setIsOpenDialog(false); // 操作完成后关闭弹窗
-    } finally {
-      setIsPending(false);
-      setIsOpenDialog(false); // 操作完成后关闭弹窗
+
+    const result = await action(); 
+
+    setIsPending(false);
+    setIsOpenDialog(false);
+    if (result.status === "ERROR") {
+      await onError?.(result);
+    } else {
+      await onSuccess?.(result);
     }
+
   };
 
   const dialog = (

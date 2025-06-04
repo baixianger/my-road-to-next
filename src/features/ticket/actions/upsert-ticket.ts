@@ -8,9 +8,8 @@ import { redirect } from "next/navigation";
 import { fromErrorToActionState, ActionState, toActionState } from "../../../components/form/to-action-state";
 import { setCookieByKey } from "@/action/cookies";
 import { toCent } from "@/utils/currency";
-import { getCurrentSession } from "@/lib/auth/cookies";
-import { signInPath } from "@/paths";
-
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-redirect";
+import { isOwner } from "@/features/auth/utils/is-owner";
 
 const upsertTicketSchema = z.object({
   title: z.string()
@@ -24,23 +23,21 @@ const upsertTicketSchema = z.object({
 });
 
 export const upsertTicket = async (
-  // id: string | undefined, 这里放表单里action动作bind的额外参数
   _actionState: ActionState,
   formData: FormData
 ) => {
 
-  const { user } = await getCurrentSession();
-
-  if (!user) {
-    await setCookieByKey("toast", "Please sign in to create a ticket");
-    redirect(signInPath());
-  }
-
-  await new Promise((resolve) => setTimeout(resolve, 1000)); // 模拟延迟，实际应用中可以去掉
-  // 这里的formData是一个FormData对象，包含了表单提交的数据
-  // 你可以使用formData.get('title')来获取表单字段的值
+  const { user } = await getAuthOrRedirect(); //确保用户登录，否则重定向到登录页面
+  await new Promise((resolve) => setTimeout(resolve, 500)); // 模拟延迟，实际应用中可以去掉
   const id = formData.get('id') as string;
+
   try {
+    if (id) {
+      const ticket = await prisma.ticket.findUnique({ where: { id } });
+      if (!ticket || !isOwner(user, ticket)) {
+        return toActionState("ERROR", "You are not authorized to update this ticket");
+      }
+    }
     const data = upsertTicketSchema.parse({
       title: formData.get('title'),
       content: formData.get('content'),
@@ -55,7 +52,7 @@ export const upsertTicket = async (
     }
     await prisma.ticket.upsert({
       where: {
-        id: id, // 这里还欠缺检查当前从cookie里获取的id是否是ticket的所有者的逻辑
+        id: id,
       },
       update: dbData,
       create: dbData,
@@ -66,7 +63,7 @@ export const upsertTicket = async (
 
   revalidatePath(ticketsPath());
   if (id) {
-    await setCookieByKey("toast", "Ticket Updated");
+    await setCookieByKey("toast", "Ticket updated successfully");
     redirect(ticketsPath()); // 之后代码不会执行
   }
   return toActionState("SUCCESS", "Ticket created successfully");
