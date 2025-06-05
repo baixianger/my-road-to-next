@@ -1,4 +1,4 @@
-"use client";
+"use server";
 
 import clsx from "clsx";
 import {
@@ -20,13 +20,18 @@ import { ticketPath, ticketEditPath } from "@/paths";
 import { toCurrencyFromCent } from "@/utils/currency";
 import { TicketMoreMenu } from "./ticket-more-menu";
 import { TicketWithUser } from "../types";
+import { getCurrentSession } from "@/lib/auth/cookies";
+import { isOwner } from "@/features/auth/utils/is-owner";
 
 type TicketItemProps = {
   ticket: TicketWithUser;
   isDetail?: boolean;
 };
 
-export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
+export const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
+  const { user } = await getCurrentSession();
+
+  const isTicketOwner = isOwner(user, ticket);
 
   const detailButton = (
     <Button variant="outline" size="icon" asChild>
@@ -38,15 +43,15 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
   );
 
 
-  const editButton = (
+  const editButton = isTicketOwner ? (
     <Button variant="outline" size="icon">
       <Link prefetch href={ticketEditPath(ticket.id)}>
         <LucideEdit className="h-4 w-4" />
       </Link>
     </Button>
-  );
+  ) : null;
 
-  const moreMenu = (
+  const moreMenu = isTicketOwner ? (
     <TicketMoreMenu
       ticket={ticket}
       menuTrigger={
@@ -55,7 +60,7 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         </Button>
       }
     />
-  );
+  ) : null;
 
   return (
     <div
