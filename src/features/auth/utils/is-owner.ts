@@ -6,8 +6,6 @@ type Entity = {
 
 export function isOwner(user: User | null, entity: Entity | null) {
 
-  console.log(user?.id);
-  console.log(entity?.userId);
   if (!entity || !user) {
     return false;
   }

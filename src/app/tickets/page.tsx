@@ -8,6 +8,7 @@ import { TicketList } from "@/features/ticket/components/ticket-list";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { CardCompact } from "@/components/card-compact";
 import { getBaseUrl } from "@/utils/url";
+import { getCurrentSession } from "@/lib/auth/cookies";
 
 
 // 在生产力环境部署，build后此页面会被编译成一个静态页面（○），
@@ -25,12 +26,15 @@ import { getBaseUrl } from "@/utils/url";
 // 另外一个方案是找到源头，是因为具体的门票页面的删除操作触发的更新需求，所以到具体功能实现的地方去revalidatePath去
 // 具体操作详见delete-ticket.ts内的注释
 
-const TicketsPage = () => {
-  console.log(getBaseUrl());
+const TicketsPage = async () => {
+  console.log("getBaseUrl", getBaseUrl());
+
+  const { user } = await getCurrentSession();
+
   return (
     <>
       <div className="flex-1 flex flex-col gap-y-8">
-        <Heading title="Tickets" description="All your tickets at one place" />
+        <Heading title="My Tickets" description="All my tickets at one place" />
 
         {/* 添加创建ticket的输入卡片 */}
         <CardCompact
@@ -47,7 +51,7 @@ const TicketsPage = () => {
           }
         >
           <Suspense fallback={<Spinner />}>
-            <TicketList />
+            <TicketList userId={user?.id}/>
           </Suspense>
         </ErrorBoundary>
         

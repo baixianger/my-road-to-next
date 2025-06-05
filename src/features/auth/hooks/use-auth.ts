@@ -1,3 +1,5 @@
+"use client";
+
 import { getCurrentSession } from "@/lib/auth/cookies";
 import { User } from "@prisma/client";
 import { useEffect, useState } from "react";

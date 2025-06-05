@@ -1,16 +1,24 @@
-import Link from "next/link";
 import { Heading } from "@/components/heading";
-import { ticketsPath } from "@/paths";
+import { Suspense } from "react";
+import { TicketList } from "@/features/ticket/components/ticket-list";
+import { ErrorBoundary } from "react-error-boundary";
+import { Placeholder } from "@/components/placeholder";
+import { Spinner } from "@/components/spinner";
+import { LucideShieldX } from "lucide-react";
 
 const HomePage = () => {
   return (
   <div className="flex-1 flex flex-col gap-y-8">
-    <Heading title="Home" description="Welcome to the Ticketing System"/>
-    <div className="flex-1 flex flex-col items-center">
-      <Link href={ticketsPath()} className="underline">
-        Go to Tickets
-      </Link>
-    </div>
+    <Heading title="All Tickets" description="All tickets at one place"/>
+    <ErrorBoundary
+          fallback={
+            <Placeholder label="Something went wrong" icon={<LucideShieldX />} />
+          }
+        >
+          <Suspense fallback={<Spinner />}>
+            <TicketList />
+          </Suspense>
+        </ErrorBoundary>
   </div>)
 };
 
