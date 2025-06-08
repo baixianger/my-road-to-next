@@ -4,6 +4,9 @@ import { getTicket } from "@/features/ticket/queries/get-ticket";
 import { notFound } from "next/navigation";
 import { getCurrentSession } from "@/lib/auth/cookies";
 import { isOwner } from "@/features/auth/utils/is-owner";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { homePath, ticketPath } from "@/paths";
+import { Separator } from "@/components/ui/separator";
 
 /*
 TODO: 此处有个设想，把修改表单的页面变成一个弹出框来进行修改。
@@ -30,13 +33,24 @@ const TicketEditPage = async ({ params}: TicketEditFormProps) => {
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center">
-      <CardCompact
-        className="animate-fade-in-from-top"
-        title="Edit Ticket"
-        description="Edit the details of your ticket."
-        content={<TicketUpsertForm ticket={ticket}/>}
-        />
+    <div className="flex flex-1 flex-col gap-y-8">
+      <Breadcrumbs 
+        breadcrumbs={[
+          { title: "Tickets", href: homePath() },
+          { title: ticket.title, href: ticketPath(ticket.id) },
+          { title: "Edit" },
+        ]}
+      />
+
+      <Separator />
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <CardCompact
+          className="animate-fade-in-from-top"
+          title="Edit Ticket"
+          description="Edit the details of your ticket."
+          content={<TicketUpsertForm ticket={ticket}/>}
+          />
+      </div>
     </div>
   );
 }
