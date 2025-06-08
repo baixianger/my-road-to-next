@@ -1,4 +1,5 @@
 {
     "workbench.sideBar.location": "right",
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.tabSize": 2
   }

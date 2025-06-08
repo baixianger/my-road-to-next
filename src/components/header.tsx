@@ -3,7 +3,7 @@ import { LucideKanban, LucideLogOut } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Button } from "@/components/ui/button";
-import { homePath, ticketsPath, signInPath, signUpPath } from "@/paths";
+import { homePath, signInPath, signUpPath } from "@/paths";
 import { ThemeSwitcher } from "./theme/theme-switcher";
 import { SubmitButton } from "./form/submit-button";
 import { signOut } from "@/features/auth/actions/sign-out";
@@ -19,27 +19,19 @@ const Header = () => {
   }
  
   const navItems = user ? (
-    <>
-      <Link
-        href={ticketsPath()}
-        className={buttonVariants({ variant: "default" })}
-      >
-        Tickets
-      </Link>
       <form action={signOut}>
         <SubmitButton icon={<LucideLogOut/>}/> {/* label="Sign Out" */}
       </form>
-    </>
   ) : (
-    <>
-			<Link href={signInPath()} className={buttonVariants({ variant: "default" })}>
-				Sign In
-			</Link>
-			<Link href={signUpPath()} className={buttonVariants({ variant: "outline" })}>
-				Sign Up
-			</Link>
-    </>
-  );
+      <>
+        <Link href={signInPath()} className={buttonVariants({ variant: "default" })}>
+          Sign In
+        </Link>
+        <Link href={signUpPath()} className={buttonVariants({ variant: "outline" })}>
+          Sign Up
+        </Link>
+      </>
+    );
 
   return (
     <nav
