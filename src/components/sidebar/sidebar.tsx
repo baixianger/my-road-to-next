@@ -33,7 +33,7 @@ const Sidebar = () => {
       onMouseEnter={() => handleToggle(true)}
       onMouseLeave={() => handleToggle(false)}
     >
-      <div className="ps-3 py-2">
+      <div className="ps-1 py-2 pr-1">
         <nav className="space-y-2">
           {sidebarNav.map((item) => (
             <SidebarItem 
