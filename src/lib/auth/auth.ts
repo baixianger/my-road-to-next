@@ -10,31 +10,45 @@ import { hashToken } from "./utils";
 const SESSION_REFRESH_INTERVAL_MS = 1000 * 60 * 60 * 24 * 15; // 15 days
 const SESSION_MAX_DURATION_MS = SESSION_REFRESH_INTERVAL_MS * 2; // 30 days
 
-export async function createSession(userId: string, token: string): Promise<Session> {
+export async function createSession(
+  userId: string,
+  token: string
+): Promise<Session> {
   const sessionId = hashToken(token);
   const session: Session = {
     id: sessionId,
     userId,
-    expiresAt: new Date(Date.now() + SESSION_MAX_DURATION_MS)
+    expiresAt: new Date(Date.now() + SESSION_MAX_DURATION_MS),
   };
   await prisma.session.create({
-    data: session
+    data: session,
   });
 
   return session;
 }
 
-export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
+// 提高安全性时，可以返回SessionGetPayload< >泛型
+// export type TicketWithUser = Prisma.SessionGetPayload<{
+//   include: {
+//     user: {
+//       select: {
+//         username: true, // filter passwordHash
+//       },
+//     },
+//   };
+// }>; // 这样返回的user就过滤密码等敏感信息了。
+export async function validateSessionToken(
+  token: string
+): Promise<SessionValidationResult> {
   const sessionId = hashToken(token);
   const result = await prisma.session.findUnique({
     where: {
-      id: sessionId
+      id: sessionId,
     },
     include: {
-      user: true
-    }
+      user: true,
+    },
   });
-
 
   // if there is no session, return null
   if (result === null) {
@@ -55,11 +69,11 @@ export async function validateSessionToken(token: string): Promise<SessionValida
     session.expiresAt = new Date(Date.now() + SESSION_MAX_DURATION_MS);
     await prisma.session.update({
       where: {
-        id: session.id
+        id: session.id,
       },
       data: {
-        expiresAt: session.expiresAt
-      }
+        expiresAt: session.expiresAt,
+      },
     });
   }
   return { session, user };
@@ -72,8 +86,8 @@ export async function invalidateSession(sessionId: string): Promise<void> {
 export async function invalidateAllSessions(userId: string): Promise<void> {
   await prisma.session.deleteMany({
     where: {
-      userId: userId
-    }
+      userId: userId,
+    },
   });
 }
 
