@@ -11,7 +11,10 @@ import { FieldError } from "./field-error";
 import { EMPTY_ACTION_STATE } from "../../../components/form/to-action-state";
 import { Form } from "@/components/form/form";
 import { fromCent } from "@/utils/currency";
-import { DatePicker, ImperativeHandleFromDatePicker } from "@/components/date-picker";
+import {
+  DatePicker,
+  ImperativeHandleFromDatePicker,
+} from "@/components/date-picker";
 
 type TicketUpsertFormProps = {
   ticket?: Awaited<ReturnType<typeof getTicket>>;
@@ -39,9 +42,13 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
     datePickerImperativeHandleRef.current?.keep?.();
   };
 
-
   return (
-    <Form action={action} actionState={actionState} onSuccess={handleSuccess} onError={handleError}>
+    <Form
+      action={action}
+      actionState={actionState}
+      onSuccess={handleSuccess}
+      onError={handleError}
+    >
       <Input type="hidden" name="id" defaultValue={ticket?.id} />
 
       <Label htmlFor="title">Title</Label>
@@ -66,7 +73,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       <FieldError actionState={actionState} name="content" />
 
       <div className="flex gap-x-2 mb-1">
-        <div className="w-1/2">
+        <div className="w-1/2 flex flex-col gap-y-2">
           <Label htmlFor="deadline">Deadline</Label>
           <DatePicker
             // key={actionState.timestamp}
@@ -80,7 +87,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
           />
           <FieldError actionState={actionState} name="deadline" />
         </div>
-        <div className="w-1/2">
+        <div className="w-1/2 flex flex-col gap-y-2">
           <Label htmlFor="bounty">Bounty ($)</Label>
           <Input
             id="bounty"
