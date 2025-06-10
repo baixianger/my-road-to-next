@@ -9,7 +9,7 @@ import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-for
 import { CardCompact } from "@/components/card-compact";
 import { getBaseUrl } from "@/utils/url";
 import { getCurrentSession } from "@/lib/auth/cookies";
-
+import { SearchParams } from "@/features/ticket/types";
 
 // 在生产力环境部署，build后此页面会被编译成一个静态页面（○），
 // 如果是对于博客这种新闻类的页面，影响不大；但是对于数据变化频繁的页面，比如票务系统，
@@ -26,7 +26,11 @@ import { getCurrentSession } from "@/lib/auth/cookies";
 // 另外一个方案是找到源头，是因为具体的门票页面的删除操作触发的更新需求，所以到具体功能实现的地方去revalidatePath去
 // 具体操作详见delete-ticket.ts内的注释
 
-const TicketsPage = async () => {
+const TicketsPage = async ({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) => {
   console.log("getBaseUrl", getBaseUrl());
 
   const { user } = await getCurrentSession();
@@ -47,16 +51,17 @@ const TicketsPage = async () => {
         {/* error boundary is more fine-grained  */}
         <ErrorBoundary
           fallback={
-            <Placeholder label="Something went wrong" icon={<LucideShieldX />} />
+            <Placeholder
+              label="Something went wrong"
+              icon={<LucideShieldX />}
+            />
           }
         >
           <Suspense fallback={<Spinner />}>
-            <TicketList userId={user?.id}/>
+            <TicketList userId={user?.id} searchParams={searchParams} />
           </Suspense>
         </ErrorBoundary>
-        
       </div>
-
     </>
   );
 };

@@ -1,18 +1,29 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { TicketWithUser } from "../types";
+import { TicketWithUser, SearchParams } from "../types";
 
-export const getTickets = async (userId: string | undefined): Promise<TicketWithUser[]> => {
-  
+type GetTicketsProps = {
+  userId: string | undefined;
+  searchParams: SearchParams;
+};
+
+export const getTickets = async ({
+  userId,
+  searchParams,
+}: GetTicketsProps): Promise<TicketWithUser[]> => {
   return await prisma.ticket.findMany({
     where: {
       userId,
+      title: {
+        contains: searchParams.search,
+        mode: "insensitive",
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
-    include: {  
+    include: {
       user: {
         select: {
           username: true,
@@ -20,4 +31,4 @@ export const getTickets = async (userId: string | undefined): Promise<TicketWith
       },
     },
   });
-}
+};
