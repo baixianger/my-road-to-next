@@ -11,6 +11,6 @@ export type TicketWithUser = Prisma.TicketGetPayload<{
 }>;
 
 export type SearchParams = {
-  search: string | undefined;
-  sort: string | undefined;
+  search: string | string[] | undefined;
+  sort: string | string[] | undefined;
 };
