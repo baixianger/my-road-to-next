@@ -17,4 +17,4 @@ export default function AuthenticatedTicketsLayout({
   }, [pathname]);
 
   return <>{children}</>;
-} 
+}
