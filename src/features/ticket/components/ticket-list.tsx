@@ -18,7 +18,6 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
       <div className="max-w-[420px] w-full flex gap-x-2">
         <SearchInput placeholder="Search tickets..." />
         <SortSelect
-          defaultValue="newest"
           options={[
             { value: "newest", label: "Newest" },
             { value: "bounty", label: "Bounty" },
