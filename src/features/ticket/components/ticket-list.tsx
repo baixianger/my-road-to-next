@@ -4,11 +4,11 @@ import { TicketItem } from "./ticket-item";
 import { LucideTicket } from "lucide-react";
 import { SearchInput } from "@/components/search-input";
 import { SortSelect } from "@/components/sort-select";
-import { SearchParams } from "../types";
+import { ParsedSearchParams } from "../types";
 
 type TicketListProps = {
   userId?: string;
-  searchParams: SearchParams;
+  searchParams: ParsedSearchParams;
 };
 
 const TicketList = async ({ userId, searchParams }: TicketListProps) => {
