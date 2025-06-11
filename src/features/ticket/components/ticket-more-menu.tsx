@@ -21,24 +21,24 @@ import { ActionState } from "@/components/form/to-action-state";
 
 type TicketMoreMenuProps = {
   ticket:
-    | Awaited<ReturnType<typeof getTickets>>[number]
+    | Awaited<ReturnType<typeof getTickets>>["list"][number]
     | Awaited<ReturnType<typeof getTicket>>;
   menuTrigger: React.ReactElement;
 };
 
 const TicketMoreMenu = ({ ticket, menuTrigger }: TicketMoreMenuProps) => {
- 
-  const deleteOnErrorHandler = async(actionState: ActionState) => {
+  const deleteOnErrorHandler = async (actionState: ActionState) => {
     toast.error(actionState.message);
   };
 
-  const deleteOnSuccessHandler = async(actionState: ActionState) => {
+  const deleteOnSuccessHandler = async (actionState: ActionState) => {
     deleteOnSuccess(actionState);
   };
- 
+
   const [deleteButton, deleteDialog] = useConfirmDialog({
     title: "Delete Ticket",
-    description: "Are you sure you want to delete this ticket? This action cannot be undone.",
+    description:
+      "Are you sure you want to delete this ticket? This action cannot be undone.",
     action: async () => deleteTicket(ticket.id),
     dialogTrigger: (
       <DropdownMenuItem>
@@ -84,7 +84,8 @@ const TicketMoreMenu = ({ ticket, menuTrigger }: TicketMoreMenuProps) => {
 
   return (
     <>
-      {deleteDialog}{/* 把dialog 和 dropdownmenu 分离 */}
+      {deleteDialog}
+      {/* 把dialog 和 dropdownmenu 分离 */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{menuTrigger}</DropdownMenuTrigger>
         <DropdownMenuContent side="right" className="w-56">
