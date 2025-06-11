@@ -1,5 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { LucideChevronLeft, LucideChevronRight } from "lucide-react";
 
 export type PageAndSize = {
@@ -32,6 +39,9 @@ const Pagination = ({
   const handlePreviousPage = () => {
     onPagination({ ...pagination, page: page - 1 });
   };
+  const handleChangeSize = (size: string) => {
+    onPagination({ page: 0, size: Number(size) });
+  };
 
   const nextButton = (
     <Button
@@ -57,10 +67,26 @@ const Pagination = ({
     </Button>
   );
 
+  const sizeButton = (
+    <Select defaultValue={size.toString()} onValueChange={handleChangeSize}>
+      <SelectTrigger className="h-8 text-muted-foreground">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="5">5</SelectItem>
+        <SelectItem value="10">10</SelectItem>
+        <SelectItem value="15">25</SelectItem>
+        <SelectItem value="20">50</SelectItem>
+        <SelectItem value="25">100</SelectItem>
+      </SelectContent>
+    </Select>
+  );
+
   return (
     <>
       <p className="text-sm text-muted-foreground">{label}</p>
       <div className="flex gap-x-2">
+        {sizeButton}
         {previousButton}
         {nextButton}
       </div>
