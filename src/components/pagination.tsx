@@ -58,13 +58,13 @@ const Pagination = ({
   );
 
   return (
-    <div className="max-w-[420px] flex justify-between items-center">
+    <>
       <p className="text-sm text-muted-foreground">{label}</p>
       <div className="flex gap-x-2">
         {previousButton}
         {nextButton}
       </div>
-    </div>
+    </>
   );
 };
 

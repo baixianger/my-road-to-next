@@ -31,78 +31,27 @@ export const getTickets = async ({
   const skip = searchParams.page * searchParams.size;
   const take = searchParams.size;
 
-  const tickets = await prisma.ticket.findMany({
-    where,
-    skip,
-    take,
-    orderBy: {
-      [searchParams.sortKey]: searchParams.sortValue,
-    },
-    include: {
-      user: {
-        select: {
-          username: true,
+  const [tickets, count] = await prisma.$transaction([
+    prisma.ticket.findMany({
+      where,
+      skip,
+      take,
+      orderBy: {
+        [searchParams.sortKey]: searchParams.sortValue,
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
         },
       },
-    },
-  });
-
-  const count = await prisma.ticket.count({ where });
-
+    }),
+    prisma.ticket.count({ where }),
+  ]);
+  const hasNextPage = count > skip + take;
   return {
     list: tickets,
-    metadata: { count, hasNextPage: count > skip + take },
+    metadata: { count, hasNextPage },
   };
-};
-
-export const getTicketsMetadata = async ({
-  userId,
-  searchParams,
-}: GetTicketsProps): Promise<{ count: number; hasNextPage: boolean }> => {
-  const skip = searchParams.page * searchParams.size;
-  const take = searchParams.size;
-  const where = {
-    userId,
-    title: {
-      contains: searchParams.search,
-      mode: "insensitive" as const,
-    },
-  };
-
-  const count = await prisma.ticket.count({ where });
-
-  return { count, hasNextPage: count > skip + take };
-};
-
-export const getTicketsOnly = async ({
-  userId,
-  searchParams,
-}: GetTicketsProps): Promise<GetTicketsResult["list"]> => {
-  const skip = searchParams.page * searchParams.size;
-  const take = searchParams.size;
-  const where = {
-    userId,
-    title: {
-      contains: searchParams.search,
-      mode: "insensitive" as const,
-    },
-  };
-
-  const tickets = await prisma.ticket.findMany({
-    where,
-    skip,
-    take,
-    orderBy: {
-      [searchParams.sortKey]: searchParams.sortValue,
-    },
-    include: {
-      user: {
-        select: {
-          username: true,
-        },
-      },
-    },
-  });
-
-  return tickets;
 };

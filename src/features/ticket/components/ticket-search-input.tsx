@@ -1,9 +1,8 @@
 "use client";
 
 import { SearchInput } from "@/components/search-input";
-import { useQueryState } from "nuqs";
-import { searchParser } from "../types";
-import { useDebounceCallback } from "usehooks-ts";
+import { useQueryState, useQueryStates } from "nuqs";
+import { paginationParser, paginationOptions, searchParser } from "../types";
 
 type TicketSearchInputProps = {
   placeholder: string;
@@ -11,18 +10,20 @@ type TicketSearchInputProps = {
 
 const TicketSearchInput = ({ placeholder }: TicketSearchInputProps) => {
   const [search, setSearch] = useQueryState("search", searchParser);
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
+  const [pagination, setPagination] = useQueryStates(
+    paginationParser,
+    paginationOptions
+  );
+  const handleSearch = (search: string) => {
+    setSearch(search);
+    setPagination({ ...pagination, page: 0 });
   };
-
-  const debouncedHandleSearch = useDebounceCallback(handleSearch, 200);
 
   return (
     <SearchInput
+      value={search}
       placeholder={placeholder}
-      onChange={debouncedHandleSearch}
-      defaultValue={search}
+      onChange={handleSearch}
     />
   );
 };

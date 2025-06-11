@@ -20,8 +20,9 @@ const TicketPureList = async ({ tickets }: { tickets: TicketWithUser[] }) => {
     <>
       {tickets.length === 0 ? (
         <Placeholder
-          label="No tickets found, create one now?"
+          label="No more tickets..."
           icon={<LucideTicket />}
+          className="max-w-[420px] w-full h-[171px]"
         />
       ) : (
         tickets.map((ticket) => (
@@ -54,7 +55,7 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
         <TicketPureList tickets={tickets} />
       </Suspense>
 
-      <div>
+      <div className="max-w-[420px] w-full flex justify-between items-center gap-x-2">
         <TicketPagination paginatedTicketsMetadata={metadata} />
       </div>
     </div>
