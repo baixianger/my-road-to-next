@@ -2,9 +2,9 @@ import { Placeholder } from "@/components/placeholder";
 import { getTickets } from "../queries/get-tickets";
 import { TicketItem } from "./ticket-item";
 import { LucideTicket } from "lucide-react";
-import { SearchInput } from "@/components/search-input";
-import { SortSelect } from "@/components/sort-select";
 import { ParsedSearchParams } from "../types";
+import { TicketSearchInput } from "./ticket-search-input";
+import { TicketSortSelect } from "./ticket-sort-select";
 
 type TicketListProps = {
   userId?: string;
@@ -16,10 +16,11 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
   return (
     <div className="flex-1 flex flex-col items-center gap-y-4 animate-fade-in-from-top">
       <div className="max-w-[420px] w-full flex gap-x-2">
-        <SearchInput placeholder="Search tickets..." />
-        <SortSelect
+        <TicketSearchInput placeholder="Search tickets..." />
+        <TicketSortSelect
           options={[
             { sortKey: "createdAt", sortValue: "desc", label: "Newest" },
+            { sortKey: "createdAt", sortValue: "asc", label: "Oldest" },
             { sortKey: "bounty", sortValue: "desc", label: "Bounty" },
             { sortKey: "title", sortValue: "asc", label: "Title" },
           ]}

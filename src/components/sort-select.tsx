@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Select,
   SelectContent,
@@ -8,31 +6,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useQueryStates } from "nuqs";
-import { sortParser, sorthOptions } from "@/features/ticket/types";
+type SortObject = {
+  sortKey: string;
+  sortValue: string;
+};
 
-type Option = {
+export type SortSelectOption = {
   sortKey: string;
   sortValue: string;
   label: string;
 };
 
 type SortSelectProps = {
-  options: Option[];
+  value: SortObject;
+  onSort: (compositeKey: string) => void;
+  options: SortSelectOption[];
 };
 
-export const SortSelect = ({ options }: SortSelectProps) => {
-  const [sort, setSort] = useQueryStates(sortParser, sorthOptions);
-
-  const handleSort = (compositeKey: string) => {
-    const [sortKey, sortValue] = compositeKey.split("_");
-    setSort({ sortKey, sortValue });
-  };
-
+export const SortSelect = ({ options, onSort, value }: SortSelectProps) => {
   return (
     <Select
-      defaultValue={sort.sortKey + "_" + sort.sortValue}
-      onValueChange={handleSort}
+      defaultValue={value.sortKey + "_" + value.sortValue}
+      onValueChange={onSort}
     >
       <SelectTrigger>
         <SelectValue />
