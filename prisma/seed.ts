@@ -35,7 +35,7 @@ const users = [
 ];
 
 // Initialize the array with the correct type
-const tickets = Array.from({ length: 12 }, (_, i) => {
+const tickets = Array.from({ length: 11 }, (_, i) => {
   const id = `${i + 1}`;
   return {
     id,

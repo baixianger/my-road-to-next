@@ -1,5 +1,3 @@
-"use server";
-
 import clsx from "clsx";
 import {
   LucideEdit,
@@ -22,6 +20,7 @@ import { TicketMoreMenu } from "./ticket-more-menu";
 import { TicketWithUser } from "../types";
 import { getCurrentSession } from "@/lib/auth/cookies";
 import { isOwner } from "@/features/auth/utils/is-owner";
+import { Comments } from "@/features/comment/components/comments";
 
 type TicketItemProps = {
   ticket: TicketWithUser;
@@ -41,7 +40,6 @@ export const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
       </Link>
     </Button>
   );
-
 
   const editButton = isTicketOwner ? (
     <Button variant="outline" size="icon">
@@ -64,54 +62,65 @@ export const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
 
   return (
     <div
-      className={clsx("w-full max-w-[420px] flex gap-x-1", {
+      className={clsx("w-full flex flex-col gap-y-4", {
         "max-w-[580px]": isDetail,
         "max-w-[420px]": !isDetail,
       })}
     >
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="flex gap-x-2 items-center">
-            <span>{TICKET_ICONS[ticket.status]}</span>
+      {/* 卡片+按钮综合体 */}
+      <div className="flex gap-x-2">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="flex gap-x-2 items-center">
+              <span>{TICKET_ICONS[ticket.status]}</span>
+              <span
+                className={clsx({
+                  "truncate max-w-70": !isDetail,
+                  "line-clamp-3": isDetail,
+                })}
+              >
+                {ticket.title}
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
             <span
-              className={clsx({
-                "truncate max-w-70": !isDetail,
-                "line-clamp-3": isDetail,
+              className={clsx("whitespace-break-spaces", {
+                "line-clamp-3": !isDetail,
               })}
             >
-              {ticket.title}
+              {ticket.content}
             </span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <span
-            className={clsx("whitespace-break-spaces", {
-              "line-clamp-3": !isDetail,
-            })}
-          >
-            {ticket.content}
-          </span>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <p className="text-sm text-muted-foreground">{ticket.deadline} by {ticket.user.username}</p>
-          <p className="text-sm text-muted-foreground">
-            {toCurrencyFromCent(ticket.bounty)}
-          </p>
-        </CardFooter>
-      </Card>
-      <div className="flex flex-col gap-y-1">
-        {isDetail ? (
-          <>
-            {editButton}
-            {moreMenu}
-          </>
-        ) : (
-          <>
-            {editButton}
-            {detailButton}
-          </>
-        )}
-      </div>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <p className="text-sm text-muted-foreground">
+              {ticket.deadline} by {ticket.user.username}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {toCurrencyFromCent(ticket.bounty)}
+            </p>
+          </CardFooter>
+        </Card>
+        <div className="flex flex-col gap-y-1">
+          {isDetail ? (
+            <>
+              {editButton}
+              {moreMenu}
+            </>
+          ) : (
+            <>
+              {editButton}
+              {detailButton}
+            </>
+          )}
+        </div>
+      </div>{" "}
+      {/* end of 卡片按钮综合体 */}
+      {isDetail && (
+        <div>
+          <Comments ticketId={ticket.id} />
+        </div>
+      )}
     </div>
   );
 };
