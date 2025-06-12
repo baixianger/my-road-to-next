@@ -114,7 +114,7 @@ export const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
             </>
           )}
         </div>
-      </div>{" "}
+      </div>
       {/* end of 卡片按钮综合体 */}
       {isDetail && (
         <div>
