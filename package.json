@@ -11,7 +11,7 @@
     "type": "tsc --noEmit",
     "postinstall": "prisma generate",
     "prisma-seed": "dotenv -e .env.local -- tsx prisma/seed.ts",
-    "comment-stuido": "因为使用的是env.local,所以需要使用dotenv来加载环境变量,否则prisma studio会报错",
+    "comment-studio": "因为使用的是env.local,所以需要使用dotenv来加载环境变量,否则prisma studio会报错",
     "prisma-studio": "dotenv -e .env.local -- prisma studio",
     "update-db-schema": "dotenv -e .env.local -- prisma db push"
   },

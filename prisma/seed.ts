@@ -11,10 +11,9 @@
    c) 或者直接执行 dotenv -e .env.local -- tsx prisma/seed.ts
    * 都测试过，加不加npx的区别在于是否全局安装了tsx和dotenv-cli
 */
-import {PrismaClient} from '@prisma/client';
-import { TicketPriority, TicketStatus } from '@prisma/client';
-import { hashPassword } from '@/lib/auth/utils';
-
+import { PrismaClient } from "@prisma/client";
+import { TicketPriority, TicketStatus } from "@prisma/client";
+import { hashPassword } from "@/lib/auth/utils";
 
 const users = [
   {
@@ -22,25 +21,42 @@ const users = [
     email: "admin@admin.com",
   },
   {
-    username: "user",
+    username: "Pai",
     email: "baixianger@gmail.com",
+  },
+  {
+    username: "test",
+    email: "test@test.com",
+  },
+  {
+    username: "Liu",
+    email: "liu@liu.com",
   },
 ];
 
 // Initialize the array with the correct type
-export const tickets = Array.from({ length: 4 }, (_, i) => {
+const tickets = Array.from({ length: 12 }, (_, i) => {
   const id = `${i + 1}`;
   return {
-      id,
-      title: `Ticket ${id}`,
-      content: `This is the description for ticket ${id}`,
-      status: ['OPEN', 'DONE', 'RUNNING', 'CLOSED'][i % 4] as TicketStatus,
-      priority: ['LOW', 'MEDIUM', 'HIGH'][i % 3] as TicketPriority,
-      deadline: new Date(Date.now() + (i + 1) * 24 * 60 * 60 * 1000).toISOString().split("T")[0], // string
-      bounty: 100 * (i + 1)
+    id,
+    title: `Ticket ${id}`,
+    content: `This is the description for ticket ${id}`,
+    status: ["OPEN", "DONE", "RUNNING", "CLOSED"][i % 4] as TicketStatus,
+    priority: ["LOW", "MEDIUM", "HIGH"][i % 3] as TicketPriority,
+    deadline: new Date(Date.now() + (i + 1) * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0], // string
+    bounty: 100 * (i + 1),
   };
 });
 
+const comments = Array.from({ length: 200 }, (_, i) => {
+  const id = `${i + 1}`;
+  return {
+    id,
+    content: `This is the comment No. ${id}`,
+  };
+});
 
 const prisma = new PrismaClient();
 
@@ -61,12 +77,14 @@ const prisma = new PrismaClient();
   );
 3. 用 createMany */
 const seed = async () => {
-
   console.log("Deleting existing data...");
+
+  await prisma.comment.deleteMany({});
   await prisma.user.deleteMany({});
   await prisma.ticket.deleteMany({});
 
   console.log("Seeding database...");
+
   const psdHash = await hashPassword("11111111");
   const dbUsers = await prisma.user.createManyAndReturn({
     data: users.map((user) => ({
@@ -74,16 +92,22 @@ const seed = async () => {
       passwordHash: psdHash,
     })),
   });
-  await prisma.ticket.createMany({
-    data: tickets.map((ticket) => ({
+
+  const dbTickets = await prisma.ticket.createManyAndReturn({
+    data: tickets.map((ticket, i) => ({
       ...ticket,
-      userId: dbUsers[0].id,
+      userId: dbUsers[i % users.length].id,
+    })),
+  });
+
+  await prisma.comment.createMany({
+    data: comments.map((comment, i) => ({
+      ...comment,
+      ticketId: dbTickets[i % tickets.length].id,
+      userId: dbUsers[i % users.length].id,
     })),
   });
   console.log("Seeding completed.");
-}
+};
 
-
-
-seed()
-
+seed();
